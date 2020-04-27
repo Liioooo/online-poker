@@ -1,7 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {Routes} from "@angular/router";
+import {Routes} from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
+import {SharedModule} from '../../shared/shared.module';
 
 
 export const HOME_ROUTES: Routes = [
@@ -14,7 +15,8 @@ export const HOME_ROUTES: Routes = [
 @NgModule({
 	declarations: [HomeComponent],
 	imports: [
-		CommonModule
+		CommonModule,
+		SharedModule
 	]
 })
 export class HomeModule {

@@ -1,0 +1,11 @@
+<div class="popup" (click)="closeOutside($event)" #outsidePopup>
+	<div class="content">
+		<div class="header">
+			<div>{{ title }}</div>
+			<img src="../../../assets/icons/close.svg" (click)="closeClick()">
+		</div>
+		<div class="body">
+			<ng-container #contentComponentInsert></ng-container>
+		</div>
+	</div>
+</div>
