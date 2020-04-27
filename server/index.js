@@ -3,14 +3,13 @@ const { createServer } = require("http");
 const express = require("express");
 const path = require('path');
 const fs = require('fs');
+const { WebsocketManager } = require('./websocket-manager')
 
 const app = express();
 const server = createServer(app);
 
-const webSocketServer = new WebSocketServer({ server });
-webSocketServer.on("connection", (webSocket) => {
-	// ws connection
-});
+const webSocketServer = new WebSocketServer({ server, path: '/ws'});
+const websocketManager = new WebsocketManager(webSocketServer)
 
 app.use(express.static(path.join(__dirname, '..', 'online-poker', 'dist')));
 app.get('*', (req, res) => {
