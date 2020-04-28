@@ -1,1 +1,37 @@
-<p>craete-game-popup works!</p>
+<div class="modal-body">
+	<form [formGroup]="createForm">
+		<div class="form-group">
+			<label for="stack-size">Stack size</label>
+			<input formControlName="stackSize" type="number" class="form-control" id="stack-size" min="1" [class.is-invalid]="createForm.controls.stackSize.invalid">
+			<div class="invalid-feedback">
+				<ng-container *ngIf="createForm.controls.stackSize.errors?.required">Stack size is required</ng-container>
+				<ng-container *ngIf="createForm.controls.stackSize.errors?.min">Stack size must be higher than 1</ng-container>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col">
+				<label for="big-blind">Big Blind</label>
+				<input formControlName="bigBlind" type="number" class="form-control" id="big-blind" min="1" [class.is-invalid]="createForm.controls.bigBlind.invalid">
+				<div class="invalid-feedback">
+					<ng-container *ngIf="createForm.controls.bigBlind.errors?.required">Big blind is required</ng-container>
+					<ng-container *ngIf="createForm.controls.bigBlind.errors?.min">Big blind must be higher than 1</ng-container>
+				</div>
+			</div>
+			<div class="form-group col">
+				<label for="small-blind">Small Blind</label>
+				<input formControlName="smallBlind" type="number" class="form-control" id="small-blind" min="1" [class.is-invalid]="createForm.controls.smallBlind.invalid">
+				<div class="invalid-feedback">
+					<ng-container *ngIf="createForm.controls.smallBlind.errors?.required">Small blind is required</ng-container>
+					<ng-container *ngIf="createForm.controls.smallBlind.errors?.min">Small blind must be higher than 1</ng-container>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="alert alert-danger" *ngIf="error">
+		{{error}}
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+	<button type="button" class="btn btn-primary" (click)="createGameClick()" [disabled]="createForm.invalid">Create Game</button>
+</div>

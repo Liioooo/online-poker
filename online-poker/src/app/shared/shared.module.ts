@@ -3,17 +3,26 @@ import { PopupComponent } from './components/popup/popup.component';
 import {PopupService} from './services/popup.service';
 import { CreateGamePopupComponent } from './components/popup-contents/create-game-popup/create-game-popup.component';
 import { JoinGamePopupComponent } from './components/popup-contents/join-game-popup/join-game-popup.component';
+import { FooterComponent } from './components/footer/footer.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
 
 @NgModule({
 	declarations: [
 		PopupComponent,
 		CreateGamePopupComponent,
-		JoinGamePopupComponent
+		JoinGamePopupComponent,
+		FooterComponent
 	],
 	exports: [
-		PopupComponent
+		PopupComponent,
+		FooterComponent
 	],
-	imports: []
+	imports: [
+		FormsModule,
+		ReactiveFormsModule,
+		CommonModule
+	]
 })
 export class SharedModule {
 	static forRoot(): ModuleWithProviders<SharedModule> {
