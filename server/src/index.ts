@@ -9,7 +9,7 @@ const app = express();
 const server = createServer(app);
 
 const webSocketServer = new WebSocketServer({ server, path: '/ws'});
-const websocketManager = new WebsocketManager(webSocketServer)
+const websocketManager = new WebsocketManager(webSocketServer);
 
 app.use(express.static(path.join(__dirname, '..', '..', 'online-poker', 'dist')));
 app.get('*', (req, res) => {
@@ -19,8 +19,8 @@ app.get('*', (req, res) => {
 	} else {
 		res.status(400).send(req.path + ' not found');
 	}
-})
+});
 
 const portIndex = process.argv.findIndex(a => a === '--port');
 const port = portIndex !== -1 ? process.argv[portIndex + 1] : 8000;
-server.listen(port, () => console.log(`Server running on port: ${port}`))
+server.listen(port, () => console.log(`Server running on port: ${port}`));

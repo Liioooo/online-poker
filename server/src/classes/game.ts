@@ -1,7 +1,10 @@
 import {Player} from './player';
 import {Cards, playingCard} from '../models/cards';
+import {v4 as Uuidv4} from 'uuid';
 
 export class Game {
+
+	public readonly id = Uuidv4();
 
 	private START_BUDGET = 10000;
 
@@ -20,13 +23,10 @@ export class Game {
 	private _roundNum: number;
 	private _hands: playingCard[][];
 
-	constructor(playerCount?: number) {
-		this._players = [];
-		if (playerCount) {
-			for (let i = 0; i < playerCount; i++) {
-				this._players.push(new Player());
-			}
-		}
+	constructor(playerCount: number = 8) {
+		if (playerCount < 2)
+			playerCount = 2;
+		this._players = new Array(playerCount > 8 ? 8 : playerCount);
 	}
 
 	public join(player: Player): void {
@@ -123,7 +123,7 @@ export class Game {
 	}
 
 	public fold(): boolean {
-		this._inRound = this._inRound.filter(p => p.id !== this.currPlayer().id);
+		this._inRound = this._inRound.filter(p => p.id !== this.currPlayer.id);
 		return this.endTurn();
 	}
 
@@ -131,6 +131,12 @@ export class Game {
 		if (!this.bet(this._lastBet - this._bets[this._currPlayerIndex])) {
 			return false;
 		}
+		return this.endTurn();
+	}
+
+	public check(): boolean {
+		if (this._lastBet !== this._bets[this._currPlayerIndex])
+			return false;
 		return this.endTurn();
 	}
 
@@ -146,18 +152,18 @@ export class Game {
 
 	// fold (raus), call (mitgehen), check??, raise (neuer Betrag)
 
-	private currPlayer(): Player {
+	public get currPlayer(): Player {
 		return this._players[this._currPlayerIndex];
 	}
 
 	private hasAmount(amount: number): boolean {
-		return this.currPlayer().budget >= amount;
+		return this.currPlayer.budget >= amount;
 	}
 
 	private bet(amount: number): boolean {
 		if (this.hasAmount(amount)) {
 			this._bets[this._currPlayerIndex] += amount;
-			this.currPlayer().budget -= amount;
+			this.currPlayer.budget -= amount;
 			return true;
 		}
 		return false;
@@ -181,6 +187,4 @@ export class Game {
 			hand: this._hands[player.id]
 		};
 	}
-
-
 }

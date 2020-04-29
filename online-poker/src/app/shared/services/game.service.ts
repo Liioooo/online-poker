@@ -22,6 +22,7 @@ export class GameService {
 	}
 
 	public joinGame(data: JoinGameData): Promise<void> {
+
 		this.router.navigate(['table', 'tableId'])
 		return Promise.resolve()
 	}
