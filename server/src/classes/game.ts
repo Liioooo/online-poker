@@ -1,5 +1,6 @@
 import {Player} from './player';
 import {Cards, playingCard} from '../models/cards';
+import {WinDetection} from './win-detection';
 
 export class Game {
 
@@ -96,7 +97,12 @@ export class Game {
 	}
 
 	private checkWin(): void {
-		this.win(this._inRound[Math.floor(Math.random() * this._inRound.length)]);
+		const hands = [];
+		for (const player of this._inRound)
+			hands.push(this._hands[player.id]);
+
+		this.win(this._players[WinDetection.getWinner(this._tableCards, hands)]);
+		// this.win(this._inRound[Math.floor(Math.random() * this._inRound.length)]);
 	}
 
 	private endTurn(): boolean {
