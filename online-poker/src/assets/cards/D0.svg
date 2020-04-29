@@ -1,0 +1,16 @@
+<svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 87">
+    <defs>
+        <style>
+            .cls-1{fill:#ddd;}.cls-2{fill:#fff;}.cls-3{isolation:isolate;font-size:12px;font-family:RobotoSlab-Regular,
+            Roboto Slab;}.red{fill:#c90005;}
+        </style>
+    </defs>
+    <rect class="cls-1" width="55" height="87" rx="4"/>
+    <rect class="cls-2" x="2" y="2" width="51" height="83" rx="4"/>
+
+    <g id="text">
+    <text class="cls-3" x="10.6" y="16" text-anchor="middle"  >10</text>
+    <text class="cls-3" x="44.6" y="-71" text-anchor="middle"  transform="scale(1,-1)" >10</text>
+    </g> <polygon class="red" points="27.5 51.5 22.34 43.5 27.5 35.5 32.66 43.5 27.5 51.5"/>
+    <polygon class="red" points="44.6 69.51 42.01 65.5 44.6 61.49 47.19 65.5 44.6 69.51"/>
+    <polygon class="red" points="10.6 25.51 8.01 21.5 10.6 17.49 13.19 21.5 10.6 25.51"/></svg>
