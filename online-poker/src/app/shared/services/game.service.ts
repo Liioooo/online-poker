@@ -17,13 +17,13 @@ export class GameService {
 	// TODO: On success: router.navigate and resolve, on fail: reject with message and dont navigate
 
 	public createGame(data: CreateGameData): Promise<void> {
-		this.router.navigate(['table', 'tableId'])
+		this.router.navigate(['table', 'tableId']);
 		return Promise.resolve();
 	}
 
 	public joinGame(data: JoinGameData): Promise<void> {
 
-		this.router.navigate(['table', 'tableId'])
+		this.router.navigate(['table', 'tableId']);
 		return Promise.resolve()
 	}
 

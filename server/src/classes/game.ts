@@ -36,6 +36,8 @@ export class Game {
 		this._hands.push([]);
 		this._hasRaised.push(false);
 		this._hasCalled.push(false);
+
+		this.pushState();
 	}
 
 	public leave(player: Player): void {
@@ -49,6 +51,7 @@ export class Game {
 			if (p.id > player.id)
 				p.id--;
 		}
+		this.pushState();
 	}
 
 	private newGame(): void {
@@ -109,6 +112,7 @@ export class Game {
 		if (this.canStartNextRound()) {
 			this.newRound();
 		}
+		this.pushState();
 		return true;
 	}
 
@@ -175,16 +179,18 @@ export class Game {
 		console.log(player.name + ' wins');
 	}
 
-	public dataToSend(player: Player): object {
-		return {
-			players: this._players,
-			currPlayerIndex: this._currPlayerIndex,
-			inRound: this._inRound,
-			bets: this._bets,
-			pot: this._pot,
-			lastBet: this._lastBet,
-			tableCards: this._tableCards,
-			hand: this._hands[player.id]
-		};
+	private pushState() {
+		this._players.forEach((player) => {
+			player.sendState({
+				players: this._players,
+				currPlayerIndex: this._currPlayerIndex,
+				inRound: this._inRound,
+				bets: this._bets,
+				pot: this._pot,
+				lastBet: this._lastBet,
+				tableCards: this._tableCards,
+				hand: this._hands[player.id]
+			});
+		});
 	}
 }

@@ -1,18 +1,16 @@
+import {Event} from './event';
+
 export interface Message {
 	event: Event,
 	data: object
 }
 
-export const enum Event {
-	CREATE_GAME,
-	JOIN_GAME,
-	BET,
-	CHECK,
-	FOLD,
-	SIT_OUT,
-	SIT_IN
-}
-
-export function validate(object): boolean {
-	return object.event && object.data;
+export function parseMessage(object: any): Message {
+	if (
+		typeof object.event === 'number' &&
+		typeof object.data === 'object'
+	)
+		return object as Message;
+	else
+		return null;
 }

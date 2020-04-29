@@ -45,9 +45,15 @@ export class Player {
 
 	private onMessage(msg: Data) {
 		console.log(`[${this._name}] ${msg}`);
+		try {
+			msg = JSON.parse(msg as string);
+		} catch (e) {
+			this._socket.send(JSON.stringify({error: 'Invalid request.'}));
+			return;
+		}
 		const message = parseMessage(msg);
 		if (!message) {
-			this._socket.send({error: 'Invalid request format.'});
+			this._socket.send(JSON.stringify({error: 'Invalid request format.'}));
 			return;
 		}
 
@@ -55,38 +61,38 @@ export class Player {
 			case Event.RAISE:
 				const data = parseRaiseData(message.data);
 				if (!data) {
-					this._socket.send({error: 'Invalid request format.'});
+					this._socket.send(JSON.stringify({error: 'Invalid request format.'}));
 					break;
 				}
 				if (this._game.currPlayer !== this) {
-					this._socket.send({error: 'It is not your turn.'});
+					this._socket.send(JSON.stringify({error: 'It is not your turn.'}));
 					break;
 				}
 				this._game.raise(data.amount);
 				break;
 			case Event.CALL:
 				if (this._game.currPlayer !== this) {
-					this._socket.send({error: 'It is not your turn.'});
+					this._socket.send(JSON.stringify({error: 'It is not your turn.'}));
 					break;
 				}
 				this._game.call();
 				break;
 			case Event.CHECK:
 				if (this._game.currPlayer !== this) {
-					this._socket.send({error: 'It is not your turn.'});
+					this._socket.send(JSON.stringify({error: 'It is not your turn.'}));
 					break;
 				}
 				this._game.check();
 				break;
 			case Event.FOLD:
 				if (this._game.currPlayer !== this) {
-					this._socket.send({error: 'It is not your turn.'});
+					this._socket.send(JSON.stringify({error: 'It is not your turn.'}));
 					break;
 				}
 				this._game.fold();
 				break;
 			default:
-				this._socket.send({error: 'Invalid request method.'});
+				this._socket.send(JSON.stringify({error: 'It is not your turn.'}));
 				break;
 		}
 	}
@@ -118,5 +124,12 @@ export class Player {
 
 	set budget(value: number) {
 		this._budget = value;
+	}
+
+	public sendState(state) {
+		this._socket.send(JSON.stringify({
+			event: Event.UPDATE,
+			data: state
+		}));
 	}
 }
