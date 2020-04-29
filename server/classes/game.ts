@@ -1,0 +1,172 @@
+import {Player} from './player';
+import {Cards, playingCard} from '../models/cards';
+
+export class Game {
+
+	private START_BUDGET = 10000;
+
+	private _players: Player[];
+	private _currPlayerIndex: number;
+	private _inRound: Player[];
+	private _hasRaised: boolean[];
+	private _hasCalled: boolean[];
+
+	private _bets: number[];
+	private _budgets: number[];
+	private _pot: number;
+	private _lastBet: number;
+
+	private _stack: playingCard[];
+	private _tableCards: playingCard[];
+	private _roundNum: number;
+
+	constructor(playerCount?: number) {
+		this._players = [];
+		if (playerCount) {
+			for (let i = 0; i < playerCount; i++) {
+				this._players.push(new Player());
+			}
+		}
+		this.newGame();
+	}
+
+	public join(player: Player): void {
+		this._players.push(player);
+		player.id = this._players.length - 1;
+		this._bets.push(0);
+		this._budgets.push(this.START_BUDGET);
+		this._hasRaised.push(false);
+		this._hasCalled.push(false);
+	}
+
+	public leave(player: Player): void {
+		this._players = this._players.filter(p => p.id !== player.id);
+		this._inRound = this._inRound.filter(p => p.id !== player.id);
+		this._bets.slice(player.id, player.id + 1);
+		this._budgets.slice(player.id, player.id + 1);
+		this._hasRaised.slice(player.id, player.id + 1);
+		this._hasCalled.slice(player.id, player.id + 1);
+		for (const p of this._players) {
+			if (p.id > player.id)
+				p.id--;
+		}
+	}
+
+	private newGame(): void {
+		this._inRound = [...this._players];
+		this._currPlayerIndex = 0;
+		this._stack = Cards.newDeck();
+		this._tableCards = [];
+		for (let player of this._players) {
+			for (let i = 0; i < 2; i++) {
+				player.hand.push(this._stack.pop());
+			}
+		}
+		this._bets = new Array(this._players.length);
+		for (let i = 0; i < this._bets.length; i++) {
+			this._bets[i] = 0;
+		}
+		this._pot = 0;
+		this._roundNum = 0;
+		this.newRound();
+	}
+
+	private newRound(): void {
+		for (let i = 0; i < this._bets.length; i++) {
+			this._bets[i] = 0;
+			this._hasRaised[i] = false;
+			this._hasCalled[i] = false;
+		}
+		this._lastBet = 0;
+		switch (this._roundNum++) {
+			case 0:
+				break;
+			case 1:
+				for (let i = 0; i < 3; i++)
+					this._tableCards.push(this._stack.pop());
+				break;
+			case 2:
+			case 3:
+				this._tableCards.push(this._stack.pop());
+				break;
+			default:
+				this.checkWin();
+				this.newGame();
+		}
+	}
+
+	private checkWin(): void {
+		this.win(this._inRound[Math.floor(Math.random() * this._inRound.length)]);
+	}
+
+	private endTurn(): boolean {
+		if (this._inRound.length === 1) {
+			this.win(this._inRound[0]);
+		}
+		do {
+			this._currPlayerIndex = (this._currPlayerIndex + 1) % this._players.length;
+		} while (this._inRound.find(p => p.id === this._players[this._currPlayerIndex].id));
+		if (this.canStartNextRound()) {
+			this.newRound();
+		}
+		return true;
+	}
+
+	private canStartNextRound(): boolean {
+		const bet = this._bets[this._inRound[0].id];
+		for (const player of this._inRound) {
+			if (!this._hasCalled[player.id] || this._bets[player.id] !== bet) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public fold(): boolean {
+		this._inRound = this._inRound.filter(p => p.id !== this.currPlayer().id);
+		return this.endTurn();
+	}
+
+	public call(): boolean {
+		if (!this.bet(this._lastBet - this._bets[this._currPlayerIndex])) {
+			return false;
+		}
+		return this.endTurn();
+	}
+
+	public raise(bet: number): boolean {
+		if (!this.bet(bet - this._bets[this._currPlayerIndex])
+			|| this._hasRaised[this._currPlayerIndex]) {
+			return false;
+		}
+		this._lastBet = bet;
+		this._hasRaised[this._currPlayerIndex] = true;
+		return this.endTurn();
+	}
+
+	// fold (raus), call (mitgehen), check??, raise (neuer Betrag)
+
+	private currPlayer(): Player {
+		return this._players[this._currPlayerIndex];
+	}
+
+	private hasAmount(amount: number): boolean {
+		return this._budgets[this._currPlayerIndex] >= amount;
+	}
+
+	private bet(amount: number): boolean {
+		if (this.hasAmount(amount)) {
+			this._bets[this._currPlayerIndex] += amount;
+			this._budgets[this._currPlayerIndex] -= amount;
+			return true;
+		}
+		return false;
+	}
+
+	private win(player: Player): void {
+		this._budgets[player.id] += this._pot;
+		this._pot = 0;
+		console.log(player.name + ' wins');
+	}
+
+}
