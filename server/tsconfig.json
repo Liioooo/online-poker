@@ -1,0 +1,19 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./src",
+		"outDir": "./dist",
+		"module": "CommonJS",
+		"target": "es6",
+		"importHelpers": true,
+		"declaration": false,
+		"experimentalDecorators": true,
+		"moduleResolution": "Node",
+		"sourceMap": false
+	},
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

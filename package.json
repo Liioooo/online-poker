@@ -1,9 +1,10 @@
 {
 	"name": "online-poker",
 	"scripts": {
-		"build": "cd online-poker && npm run build",
+		"build": "cd server && npm run build && cd .. && cd online-poker && npm run build",
 		"install-deps": "cd online-poker && npm i && cd .. && cd server && npm i",
-		"start:server": "node server/index.js",
+		"start:server": "cd server && npm start",
+		"start:server:dev": "cd server && npm start:dev",
 		"start:frontend": "cd online-poker && npm start"
 	}
 }

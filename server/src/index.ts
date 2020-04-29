@@ -1,9 +1,9 @@
-const WebSocketServer = require('ws').Server;
-const { createServer } = require("http");
-const express = require("express");
-const path = require('path');
-const fs = require('fs');
-const { WebsocketManager } = require('./websocket-manager')
+import {Server as WebSocketServer} from 'ws'
+import { createServer } from 'http';
+import * as express from 'express';
+import * as path from 'path';
+import * as fs from 'fs';
+import {WebsocketManager} from './websocket-manager';
 
 const app = express();
 const server = createServer(app);
@@ -11,9 +11,9 @@ const server = createServer(app);
 const webSocketServer = new WebSocketServer({ server, path: '/ws'});
 const websocketManager = new WebsocketManager(webSocketServer)
 
-app.use(express.static(path.join(__dirname, '..', 'online-poker', 'dist')));
+app.use(express.static(path.join(__dirname, '..', '..', 'online-poker', 'dist')));
 app.get('*', (req, res) => {
-	const indexFile = path.join(__dirname, '..', 'online-poker', 'dist', 'index.html');
+	const indexFile = path.join(__dirname, '..', '..', 'online-poker', 'dist', 'index.html');
 	if (fs.existsSync(indexFile)) {
 		res.sendFile(indexFile);
 	} else {
