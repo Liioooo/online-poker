@@ -5,10 +5,9 @@ export class Player {
 	private _id: number;
 	private _name: string;
 
-	private _hand: playingCard[];
+	private _budget: number;
 
 	constructor() {
-		this._hand = [];
 	}
 
 
@@ -28,11 +27,11 @@ export class Player {
 		this._name = value;
 	}
 
-	get hand(): playingCard[] {
-		return this._hand;
+	get budget(): number {
+		return this._budget;
 	}
 
-	set hand(value: playingCard[]) {
-		this._hand = value;
+	set budget(value: number) {
+		this._budget = value;
 	}
 }
