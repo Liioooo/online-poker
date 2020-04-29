@@ -3,8 +3,28 @@ import {Cards, playingCard} from '../models/cards';
 export class WinDetection {
 
 	// TODO
-	public static getWinner(tableCards: playingCard[], hands: playingCard[][]): number {
+	public static getWinners(tableCards: playingCard[], hands: playingCard[][]): number[] {
+		let rankings: number[][] = [];
+		for (let hand of hands)
+			rankings.push(WinDetection.getRanking(tableCards.concat(hand)));
+		rankings = rankings.sort((a, b) => {
+			return WinDetection.rankingDiff(b, a);
+		});
 
+		const winners = [rankings.pop()];
+		let other;
+		while (WinDetection.rankingDiff(winners[0], other = rankings.pop()) === 0) {
+			winners.push(other);
+		}
+		console.log(winners);
+		return [0];
+	}
+
+	private static rankingDiff(a: number[], b: number[]): number {
+		for (let i = 0; i < a.length; i++) {
+			if (a[i] !== b[i])
+				return a[i] - b[i];
+		}
 		return 0;
 	}
 
@@ -16,9 +36,6 @@ export class WinDetection {
 			const cards = Cards.newDeck().slice(0, 7);
 			const val = WinDetection.getRanking(cards)[0];
 			map.set(val, map.get(val) + 1);
-			// const start = Date.now();
-			// console.log(cards, WinDetection.getRanking(cards));
-			// console.log('win-detection took: ', Date.now() - start);
 		}
 		console.log(map);
 		for (const val of map.values()) {

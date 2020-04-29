@@ -101,7 +101,7 @@ export class Game {
 		for (const player of this._inRound)
 			hands.push(this._hands[player.id]);
 
-		this.win(this._players[WinDetection.getWinner(this._tableCards, hands)]);
+		this.win(this._players[WinDetection.getWinners(this._tableCards, hands)]);
 		// this.win(this._inRound[Math.floor(Math.random() * this._inRound.length)]);
 	}
 
