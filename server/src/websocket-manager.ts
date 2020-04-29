@@ -34,7 +34,6 @@ export class WebsocketManager {
 				}));
 				return;
 			}
-			console.log(message);
 			if (message.event === Event.CREATE_GAME) {
 				const data = parseCreateGameData(message.data);
 				if (!data) {
@@ -43,14 +42,16 @@ export class WebsocketManager {
 					}));
 					return;
 				}
-				const player = new Player(socket, data.playerName);
 				const game = new Game();
-				game.join(player);
+				const player = new Player(socket, data.playerName, game);
 				this.games.set(game.id, game);
 				socket.send(JSON.stringify({
 					event: Event.JOIN_GAME,
-					gameId: game.id
+					data: {
+						gameId: game.id
+					}
 				}));
+				game.join(player);
 				clearTimeout(timeout);
 			} else if (message.event == Event.JOIN_GAME) {
 				const data = parseJoinGameData(message.data);
@@ -66,12 +67,14 @@ export class WebsocketManager {
 					}));
 					return;
 				}
-				const player = new Player(socket, data.playerName);
-				this.games.get(data.gameId).join(player);
+				const player = new Player(socket, data.playerName, this.games.get(data.gameId));
 				socket.send(JSON.stringify({
 					event: Event.CREATE_GAME,
-					gameId: data.gameId
+					data: {
+						gameId: data.gameId
+					}
 				}));
+				this.games.get(data.gameId).join(player);
 				clearTimeout(timeout);
 			} else {
 				socket.send(JSON.stringify({

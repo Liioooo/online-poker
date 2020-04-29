@@ -27,6 +27,12 @@ export class Game {
 		if (playerCount < 2)
 			playerCount = 2;
 		this._players = new Array(playerCount > 8 ? 8 : playerCount);
+
+		this._bets = [];
+		this._hands = [];
+		this._hasRaised = [];
+		this._hasCalled = [];
+		this._inRound = [];
 	}
 
 	public join(player: Player): void {
@@ -182,7 +188,13 @@ export class Game {
 	private pushState() {
 		this._players.forEach((player) => {
 			player.sendState({
-				players: this._players,
+				players: this._players.map(x => {
+					return {
+						id: x.id,
+						name: x.name,
+						budget: x.budget
+					};
+				}),
 				currPlayerIndex: this._currPlayerIndex,
 				inRound: this._inRound,
 				bets: this._bets,

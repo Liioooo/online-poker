@@ -19,11 +19,11 @@ export class JoinGamePopupComponent extends PopupContentCompDirective<string> {
 
 	public async joinGameClick() {
 		const gameData: JoinGameData = {
-			id: this.gameLink,
+			gameId: this.gameLink,
 			playerName: this.inputFromOpener
-		}
+		};
 		try {
-			await this.gameService.joinGame(gameData)
+			await this.gameService.joinGame(gameData);
 			this.requestClose.emit();
 		} catch (e) {
 			this.error = e;

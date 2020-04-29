@@ -6,7 +6,6 @@ import {Event} from '../models/event';
 import {parseRaiseData} from '../models/message-data/raise-data';
 
 export class Player {
-
 	private _id: number;
 	private _name: string;
 
@@ -18,9 +17,10 @@ export class Player {
 
 	private _budget: number;
 
-	constructor(socket: WebSocket, name: string) {
+	constructor(socket: WebSocket, name: string, game: Game) {
 		this._socket = socket;
 		this._name = name;
+		this._game = game;
 
 		this._socket.on('message', msg => {
 			this.onMessage(msg);
@@ -124,6 +124,14 @@ export class Player {
 
 	set budget(value: number) {
 		this._budget = value;
+	}
+
+	get game(): Game {
+		return this._game;
+	}
+
+	set game(value: Game) {
+		this._game = value;
 	}
 
 	public sendState(state) {

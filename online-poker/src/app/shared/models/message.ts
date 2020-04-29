@@ -5,6 +5,10 @@ export interface Message {
 	data: object
 }
 
+export interface ErrorMessage {
+	error: string
+}
+
 export function parseMessage(object: any): Message {
 	if (
 		typeof object.event === 'number' &&
