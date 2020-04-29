@@ -1,3 +1,15 @@
-.nav-link {
-	padding: 0;
+.navbar {
+	.nav-link {
+		padding: 0;
+	}
+
+	.invite {
+		font-size: 1.2rem;
+
+		button {
+			font-size: 1.2rem;
+		}
+	}
 }
+
+

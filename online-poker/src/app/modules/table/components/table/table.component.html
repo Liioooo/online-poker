@@ -1,1 +1,40 @@
-<p>table works!</p>
+<div class="table-page">
+	<div class="top-bar d-flex align-items-center">
+		<h4 class="ml-2 my-0">
+			Blind: 10 / 20
+		</h4>
+	</div>
+	<div class="center d-flex justify-content-center align-items-center">
+		<div>
+			<h1 class="text-center">500</h1>
+			<div class="d-flex justify-content-center center-cards">
+				<img src="assets/cards/2_of_clubs.svg" class="poker-card m-1">
+				<img src="assets/cards/2_of_clubs.svg" class="poker-card m-1">
+				<img src="assets/cards/2_of_clubs.svg" class="poker-card m-1">
+				<img src="assets/cards/2_of_clubs.svg" class="poker-card m-1">
+				<img src="assets/cards/2_of_clubs.svg" class="poker-card m-1">
+			</div>
+		</div>
+		<div class="players">
+			<app-player positionX="-37vw" positionY="1vh"></app-player>
+			<app-player positionX="0" positionY="-25vh"></app-player>
+			<app-player positionX="-25vw" positionY="-15vh"></app-player>
+			<app-player positionX="25vw" positionY="-15vh"></app-player>
+			<app-player positionX="25vw" positionY="22vh"></app-player>
+			<app-player positionX="-25vw" positionY="22vh"></app-player>
+			<app-player positionX="0" positionY="30vh"></app-player>
+			<app-player positionX="37vw" positionY="1vh"></app-player>
+		</div>
+	</div>
+	<div class="controls d-flex justify-content-between">
+		<div class="m-2"></div>
+		<div class="m-2 p-2 border rounded-sm d-flex align-items-center">
+			<input type="number" class="amount-input form-control form-control-lg border-success h-100" min="0">
+			<button type="button" class="action-btn btn btn-outline-success h-100 ml-2">Call 100</button>
+			<button type="button" class="action-btn btn btn-outline-success h-100 ml-2">Check</button>
+			<button type="button" class="action-btn btn btn-outline-success h-100 ml-2">Raise 100</button>
+			<button type="button" class="action-btn btn btn-outline-success h-100 ml-2">Bet 50</button>
+			<button type="button" class="action-btn btn btn-outline-danger h-100 ml-2">Fold</button>
+		</div>
+	</div>
+</div>

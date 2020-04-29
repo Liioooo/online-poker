@@ -1,0 +1,54 @@
+@import "~bootswatch/dist/darkly/variables";
+
+.table-page {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.top-bar {
+		height: 3rem;
+	}
+
+	.center {
+		flex-grow: 1;
+
+		.center-cards {
+			height: 12vh;
+
+			@media (min-width: 1350px) {
+				height: 14vh;
+			}
+			@media (min-width: 1450px) {
+				height: 16vh;
+			}
+			@media (min-width: 1650px) {
+				height: 18vh;
+			}
+
+			.poker-card {
+				height: 100%;
+			}
+		}
+
+		.players {
+			position: absolute;
+		}
+
+	}
+
+	.controls {
+		height: 7rem;
+
+		.amount-input {
+			color: $success;
+			background: transparent;
+			font-size: 1.5rem;
+			width: 8rem;
+		}
+
+		.action-btn {
+			min-width: 7rem;
+			font-size: 1.5rem;
+		}
+	}
+}

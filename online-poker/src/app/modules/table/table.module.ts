@@ -3,10 +3,11 @@ import {CommonModule} from '@angular/common';
 import { TableComponent } from './components/table/table.component';
 import {TableRoutingModule} from './table-routing.module';
 import {SharedModule} from '../../shared/shared.module';
+import { PlayerComponent } from './components/player/player.component';
 
 
 @NgModule({
-	declarations: [TableComponent],
+	declarations: [TableComponent, PlayerComponent],
 	imports: [
 		CommonModule,
 		SharedModule,
