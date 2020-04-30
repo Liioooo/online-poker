@@ -1,16 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
+import {GameService} from '../../../../shared/services/game.service';
+import {Game} from '../../../../shared/classes/game';
 
 @Component({
 	selector: 'app-table',
 	templateUrl: './table.component.html',
 	styleUrls: ['./table.component.scss']
 })
-export class TableComponent implements OnInit {
+export class TableComponent {
 
-	constructor() {
+	constructor(private gameService: GameService) {
 	}
 
-	ngOnInit(): void {
+	public get game(): Game {
+		return this.gameService.game;
 	}
 
 }

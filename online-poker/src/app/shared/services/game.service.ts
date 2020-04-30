@@ -4,13 +4,12 @@ import {JoinGameData} from '../models/join-game-data';
 import {Router} from '@angular/router';
 import {Game} from '../classes/game';
 import {WebsocketService} from './websocket.service';
+import {Event} from '../models/response/event';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class GameService {
-
-	private _currentGame: Game;
 
 	constructor(private router: Router, private webSocket: WebsocketService) {
 	}
@@ -27,7 +26,55 @@ export class GameService {
 		this.router.navigate(['table', gameId]);
 	}
 
+	public leaveGame() {
+
+	}
+
+	public call() {
+		if (!this.game.canCall) return;
+		this.webSocket.send({
+			event: Event.CALL,
+			data: null
+		});
+	}
+
+	public check() {
+		if (!this.game.canCheck) return;
+		this.webSocket.send({
+			event: Event.CHECK,
+			data: null
+		});
+	}
+
+	public bet(amount: number) {
+		if (!(this.game.canBet && this.game.playerBudget <= amount)) return;
+		this.webSocket.send({
+			event: Event.RAISE,
+			data: {
+				amount
+			}
+		});
+	}
+
+	public fold() {
+		if (!this.game.canFold) return;
+		this.webSocket.send({
+			event: Event.FOLD,
+			data: null
+		});
+	}
+
+	public raise(amount: number) {
+		if (!(this.game.canRaise && this.game.playerBudget <= amount)) return;
+		this.webSocket.send({
+			event: Event.RAISE,
+			data: {
+				amount
+			}
+		});
+	}
+
 	public get game(): Game {
-		return this._currentGame;
+		return this.webSocket.game;
 	}
 }
