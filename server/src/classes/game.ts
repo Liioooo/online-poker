@@ -84,7 +84,7 @@ export class Game {
 		// TODO Andi
 	}
 
-	private newGame(): void {
+	public newGame(): void {
 		if (!this._hasStarted) {
 			do {
 				this._smallBlindIndex = Math.floor(Math.random() * this._players.length);

@@ -104,6 +104,9 @@ export class Player {
 				}
 				this._game.fold();
 				break;
+			case Event.START_GAME:
+				this.game.newGame();
+				break;
 			default:
 				this._socket.send(JSON.stringify({error: 'It is not your turn.'}));
 				break;
