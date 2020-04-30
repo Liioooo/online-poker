@@ -14,21 +14,29 @@ export class Game {
 
 	private _players: Player[];
 	private _currPlayerIndex: number;
+	private _smallBlindIndex: number;
 
 	private _pot: number;
 	private _lastBet: number;
+
+	private _smallBlindAmount: number;
 
 	private _stack: playingCard[];
 	private _tableCards: playingCard[];
 	private _roundNum: number;
 
-	constructor(playerCount?: number) {
+	constructor(smallBlindAmount: number, playerCount?: number) {
+		this._smallBlindAmount = smallBlindAmount;
 		if (playerCount)
 			this._playerLimit = playerCount;
 		this._players = [];
+		do {
+			this._smallBlindIndex = Math.random() * this._players.length;
+		} while (!this._players[this._smallBlindIndex]);
 	}
 
 	public join(player: Player): boolean {
+		player.budget = this.START_BUDGET;
 		const playerCount = this._players.filter(p => p !== null).length;
 		if (playerCount >= this._playerLimit)
 			return false;
@@ -48,6 +56,13 @@ export class Game {
 	}
 
 	public leave(player: Player): void {
+		player.inGame = false;
+		if (this._currPlayerIndex === player.id) {
+			this.endTurn();
+		}
+		if (this._smallBlindIndex === player.id) {
+			this._smallBlindIndex = this.bigBlindIndex;
+		}
 		this._players[player.id] = null;
 		let deleteGame = true;
 		for (const player of this._players) {
@@ -67,8 +82,9 @@ export class Game {
 
 	private newGame(): void {
 		this._hasStarted = true;
-		this._players.forEach(p => p.inGame = true);
-		this._currPlayerIndex = 0;
+		this._players.forEach(p => { if (p) p.inGame = true });
+		this._smallBlindIndex = this.bigBlindIndex;
+		this._currPlayerIndex = this._smallBlindIndex;
 		this._stack = Cards.newDeck();
 		this._tableCards = [];
 		for (let player of this._players) {
@@ -94,6 +110,10 @@ export class Game {
 		this._lastBet = 0;
 		switch (this._roundNum++) {
 			case 0:
+				this.bet(this._smallBlindAmount);
+				this.endTurn(true);
+				this.bet(this._smallBlindAmount * 2);
+				this.endTurn();
 				break;
 			case 1:
 				for (let i = 0; i < 3; i++)
@@ -110,14 +130,15 @@ export class Game {
 	}
 
 	private checkWin(): void {
-		const winners = WinDetection.getWinners(this._tableCards, this.inRoundPlayers());
+		const winners = WinDetection.getWinners(this._tableCards, this.inGamePlayers());
 		console.log(winners);
 	}
 
-	private endTurn(): boolean {
-		this.currPlayer.hasCalled = true;
-		if (this.inRoundPlayers().length === 1) {
-			this.win(this.inRoundPlayers()[0]);
+	private endTurn(isSmallBlind?: boolean): boolean {
+		if (!isSmallBlind)
+			this.currPlayer.hasCalled = true;
+		if (this.inGamePlayers().length === 1) {
+			this.win(this.inGamePlayers()[0]);
 		}
 		do {
 			this._currPlayerIndex = (this._currPlayerIndex + 1) % this._players.length;
@@ -130,8 +151,8 @@ export class Game {
 	}
 
 	private canStartNextRound(): boolean {
-		const bet = this.inRoundPlayers()[0].bet;
-		for (const player of this.inRoundPlayers()) {
+		const bet = this.inGamePlayers()[0].bet;
+		for (const player of this.inGamePlayers()) {
 			if (!player.hasCalled || player.bet !== bet) {
 				return false;
 			}
@@ -181,7 +202,23 @@ export class Game {
 		return this._players[this._currPlayerIndex];
 	}
 
-	private inRoundPlayers(): Player[] {
+	public get smallBlind(): Player {
+		return this._players[this._smallBlindIndex];
+	}
+
+	public get bigBlind(): Player {
+		return this._players[this.bigBlindIndex];
+	}
+
+	private get bigBlindIndex(): number {
+		let bb = this._smallBlindIndex + 1;
+		while (!this._players[bb]) {
+			bb = (bb + 1) % this._players.length;
+		}
+		return bb;
+	}
+
+	private inGamePlayers(): Player[] {
 		return this._players.filter(p => p !== null && p.inGame);
 	}
 
@@ -214,7 +251,8 @@ export class Game {
 				pot: this._pot,
 				lastBet: this._lastBet,
 				tableCards: this._tableCards,
-				hasStarted: this._hasStarted
+				hasStarted: this._hasStarted,
+				smallBlindAmount: this._smallBlindAmount
 			});
 		});
 	}
