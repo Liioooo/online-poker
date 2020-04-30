@@ -95,10 +95,10 @@ export class Game {
 
 	private checkWin(): void {
 		const hands = [];
-		for (const player of this._inRound)
-			hands.push(this._hands[player.id]);
+		for (const player of this.inRoundPlayers())
+			hands.push(player.hand);
 
-		this.win(this._players[WinDetection.getWinners(this._tableCards, hands)]);
+		WinDetection.getWinners(this._tableCards, hands);
 		// this.win(this._inRound[Math.floor(Math.random() * this._inRound.length)]);
 	}
 
