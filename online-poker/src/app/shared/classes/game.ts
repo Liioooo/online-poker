@@ -19,6 +19,7 @@ export class Game {
 	private _isPlayerTurn = false;
 	private _canCheck = false;
 	private _canCall = false;
+	private _toCall = 0;
 	private _canBet = false;
 	private _canRaise = false;
 	private _canFold = false;
@@ -54,6 +55,11 @@ export class Game {
 		if (this._isPlayerTurn) {
 			this._canCheck = this._lastBet === 0;
 			this._canCall = this._lastBet > this._players[this._playerId].bet && this._players[this._playerId].budget > 0;
+			if (this._players[this._playerId].budget > this._lastBet - this._players[this._playerId].bet) {
+				this._toCall = this._lastBet - this._players[this._playerId].bet;
+			} else {
+				this._toCall = this._players[this._playerId].budget
+			}
 			this._canBet = this._lastBet === 0 && !this._players[this._playerId].hasRaised && this._players[this._playerId].budget > 0;
 			this._canRaise = this._lastBet > 0 && !this._players[this._playerId].hasRaised && this._players[this._playerId].budget > 0;
 			this._canFold = true;
@@ -100,6 +106,10 @@ export class Game {
 
 	get canCall(): boolean {
 		return this._canCall;
+	}
+
+	get toCall(): number {
+		return this._toCall;
 	}
 
 	get canBet(): boolean {

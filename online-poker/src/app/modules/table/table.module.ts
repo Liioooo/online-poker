@@ -4,6 +4,7 @@ import { TableComponent } from './components/table/table.component';
 import {TableRoutingModule} from './table-routing.module';
 import {SharedModule} from '../../shared/shared.module';
 import { PlayerComponent } from './components/player/player.component';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { PlayerComponent } from './components/player/player.component';
 	imports: [
 		CommonModule,
 		SharedModule,
-		TableRoutingModule
+		TableRoutingModule,
+		FormsModule
 	]
 })
 export class TableModule {

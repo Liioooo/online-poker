@@ -1,6 +1,6 @@
 <div class="table-page">
 	<div class="top-bar d-flex align-items-center">
-		<h4 class="ml-2 my-0">
+		<h4 class="ml-2 my-0" *ngIf="game">
 			Blind: {{game?.smallBlind}} / {{game?.bigBlind}}
 		</h4>
 	</div>
@@ -26,14 +26,14 @@
 		<div class="m-2"></div>
 		<div class="m-2 p-2 border rounded-sm d-flex align-items-center">
 			<ng-container *ngIf="game?.hasStarted">
-				<input *ngIf="game?.canRaise || game?.canBet" type="number" class="amount-input form-control form-control-lg border-success h-100" min="0">
-				<button *ngIf="game?.canCall" type="button" class="action-btn btn btn-outline-success h-100 ml-2">Call 100</button>
-				<button *ngIf="game?.canCheck" type="button" class="action-btn btn btn-outline-success h-100 ml-2">Check</button>
-				<button *ngIf="game?.canRaise" type="button" class="action-btn btn btn-outline-success h-100 ml-2">Raise 100</button>
-				<button *ngIf="game?.canBet" type="button" class="action-btn btn btn-outline-success h-100 ml-2">Bet 50</button>
-				<button *ngIf="game?.canFold" type="button" class="action-btn btn btn-outline-danger h-100 ml-2">Fold</button>
+				<input *ngIf="game?.canRaise || game?.canBet" type="number" class="amount-input form-control form-control-lg border-success h-100" min="0" [(ngModel)]="betAmount" [max]="game.playerBudget">
+				<button *ngIf="game?.canCall" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="call()">Call {{game.toCall}}</button>
+				<button *ngIf="game?.canCheck" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="check()">Check</button>
+				<button *ngIf="game?.canRaise" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="raise()">Raise {{betAmount}}</button>
+				<button *ngIf="game?.canBet" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="bet()">Bet {{betAmount}}</button>
+				<button *ngIf="game?.canFold" type="button" class="action-btn btn btn-outline-danger h-100 ml-2" (click)="fold()">Fold</button>
 			</ng-container>
-			<button *ngIf="!game?.hasStarted" type="button" class="action-btn btn btn-outline-success h-100">Start Game</button>
+			<button *ngIf="!game?.hasStarted" type="button" class="action-btn btn btn-outline-success h-100" (click)="startGame()">Start Game</button>
 		</div>
 	</div>
 </div>
