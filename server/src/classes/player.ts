@@ -4,6 +4,7 @@ import {Game} from './game';
 import {parseMessage} from '../models/message';
 import {Event} from '../models/event';
 import {parseRaiseData} from '../models/message-data/raise-data';
+import {playingCard} from '../models/cards';
 
 export class Player {
 	private _id: number;
@@ -16,6 +17,12 @@ export class Player {
 	private _isAlive = true;
 
 	private _budget: number;
+	private _bet: number;
+	private _inRound: boolean;
+	private _hasRaised: boolean;
+	private _hasCalled: boolean;
+
+	private _hand: playingCard[];
 
 	constructor(socket: WebSocket, name: string, game: Game) {
 		this._socket = socket;
@@ -132,6 +139,47 @@ export class Player {
 
 	set game(value: Game) {
 		this._game = value;
+	}
+
+
+	get bet(): number {
+		return this._bet;
+	}
+
+	set bet(value: number) {
+		this._bet = value;
+	}
+
+	get hand(): playingCard[] {
+		return this._hand;
+	}
+
+	set hand(value: playingCard[]) {
+		this._hand = value;
+	}
+
+	get inRound(): boolean {
+		return this._inRound;
+	}
+
+	set inRound(value: boolean) {
+		this._inRound = value;
+	}
+
+	get hasRaised(): boolean {
+		return this._hasRaised;
+	}
+
+	set hasRaised(value: boolean) {
+		this._hasRaised = value;
+	}
+
+	get hasCalled(): boolean {
+		return this._hasCalled;
+	}
+
+	set hasCalled(value: boolean) {
+		this._hasCalled = value;
 	}
 
 	public sendState(state) {
