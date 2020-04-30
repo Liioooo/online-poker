@@ -6,13 +6,15 @@ import { JoinGamePopupComponent } from './components/popup-contents/join-game-po
 import { FooterComponent } from './components/footer/footer.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
+import { AskForNameComponent } from './components/popup-contents/ask-for-name/ask-for-name.component';
 
 @NgModule({
 	declarations: [
 		PopupComponent,
 		CreateGamePopupComponent,
 		JoinGamePopupComponent,
-		FooterComponent
+		FooterComponent,
+		AskForNameComponent
 	],
 	exports: [
 		PopupComponent,
