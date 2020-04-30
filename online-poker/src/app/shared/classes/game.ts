@@ -24,6 +24,8 @@ export class Game {
 	private _canRaise = false;
 	private _canFold = false;
 
+	private _performedAction = false;
+
 	constructor(gameId: string) {
 		this._gameId = gameId;
 	}
@@ -39,6 +41,7 @@ export class Game {
 		this._lastBet = data.lastBet;
 		this._smallBlind = data.smallBlindAmount;
 		this._bigBlind = data.bigBlindAmount;
+		this._performedAction = false;
 
 		this._isPlayerTurn = this._currPlayerIndex === this._playerId && this._hasStarted;
 
@@ -138,5 +141,13 @@ export class Game {
 
 	get hasStarted(): boolean {
 		return this._hasStarted;
+	}
+
+	get performedAction(): boolean {
+		return this._performedAction;
+	}
+
+	set performedAction(value: boolean) {
+		this._performedAction = value;
 	}
 }
