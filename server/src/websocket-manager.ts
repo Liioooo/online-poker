@@ -21,9 +21,9 @@ export class WebsocketManager {
 				error: 'No player data received.'
 			}));
 			socket.close();
-		}, 1000000);
+		}, 10000);
 
-		socket.on('message', (msg: string) => {
+		const onMessage = (msg: string) => {
 			let message: Message;
 			try {
 				message = JSON.parse(msg);
@@ -42,11 +42,13 @@ export class WebsocketManager {
 					}));
 					return;
 				}
+
 				const game = new Game(data.smallBlind, data.bigBlind, data.buyIn);
+				socket.removeListener('message', onMessage);
 				const player = new Player(socket, data.playerName, game);
 				this.games.set(game.id, game);
 				socket.send(JSON.stringify({
-					event: Event.JOIN_GAME,
+					event: Event.CREATE_GAME,
 					data: {
 						gameId: game.id
 					}
@@ -67,9 +69,10 @@ export class WebsocketManager {
 					}));
 					return;
 				}
+				socket.removeListener('message', onMessage);
 				const player = new Player(socket, data.playerName, this.games.get(data.gameId));
 				socket.send(JSON.stringify({
-					event: Event.CREATE_GAME,
+					event: Event.JOIN_GAME,
 					data: {
 						gameId: data.gameId
 					}
@@ -81,6 +84,8 @@ export class WebsocketManager {
 					error: 'User is not initialized yet.'
 				}));
 			}
-		});
+		};
+
+		socket.on('message', onMessage);
 	}
 }
