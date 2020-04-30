@@ -56,14 +56,16 @@ export class Game {
 	}
 
 	public leave(player: Player): void {
-		player.inGame = false;
-		if (this._currPlayerIndex === player.id) {
-			this.endTurn();
+		if (this._hasStarted) {
+			player.inGame = false;
+			if (this._currPlayerIndex === player.id) {
+				this.endTurn();
+			}
+			if (this._smallBlindIndex === player.id) {
+				this._smallBlindIndex = this.bigBlindIndex;
+			}
+			this._players[player.id] = null;
 		}
-		if (this._smallBlindIndex === player.id) {
-			this._smallBlindIndex = this.bigBlindIndex;
-		}
-		this._players[player.id] = null;
 		let deleteGame = true;
 		for (const player of this._players) {
 			if (player) {
