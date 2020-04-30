@@ -18,7 +18,7 @@ export class Player {
 
 	private _budget: number;
 	private _bet: number;
-	private _inRound: boolean;
+	private _inGame: boolean;
 	private _hasRaised: boolean;
 	private _hasCalled: boolean;
 
@@ -28,6 +28,12 @@ export class Player {
 		this._socket = socket;
 		this._name = name;
 		this._game = game;
+
+		this._bet = 0;
+		this._inGame = false;
+		this._hasRaised = false;
+		this._hasCalled = false;
+		this._hand = [];
 
 		this._socket.on('message', msg => {
 			this.onMessage(msg);
@@ -158,12 +164,12 @@ export class Player {
 		this._hand = value;
 	}
 
-	get inRound(): boolean {
-		return this._inRound;
+	get inGame(): boolean {
+		return this._inGame;
 	}
 
-	set inRound(value: boolean) {
-		this._inRound = value;
+	set inGame(value: boolean) {
+		this._inGame = value;
 	}
 
 	get hasRaised(): boolean {

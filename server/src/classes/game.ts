@@ -11,29 +11,18 @@ export class Game {
 
 	private _players: Player[];
 	private _currPlayerIndex: number;
-	private _inRound: Player[];
-	private _hasRaised: boolean[];
-	private _hasCalled: boolean[];
 
-	private _bets: number[];
 	private _pot: number;
 	private _lastBet: number;
 
 	private _stack: playingCard[];
 	private _tableCards: playingCard[];
 	private _roundNum: number;
-	private _hands: playingCard[][];
 
 	constructor(playerCount?: number) {
 		if (playerCount)
 			this._playerLimit = playerCount;
 		this._players = [];
-
-		this._bets = [];
-		this._hands = [];
-		this._hasRaised = [];
-		this._hasCalled = [];
-		this._inRound = [];
 	}
 
 	public join(player: Player): boolean {
@@ -41,12 +30,7 @@ export class Game {
 		if (playerCount >= this._playerLimit)
 			return false;
 		if (playerCount === this._players.length) {
-			this._players.push(null);
-			this._bets.push(null);
-			this._hands.push(null);
-			this._hasRaised.push(null);
-			this._hasCalled.push(null);
-			this._inRound.push(null);
+			this._players.push(player);
 		}
 		for (let i = 0; i < this._players.length; i++) {
 			if (!this._players[i]) {
@@ -55,10 +39,6 @@ export class Game {
 				break;
 			}
 		}
-		this._bets[player.id] = 0;
-		this._hands[player.id] = [];
-		this._hasRaised[player.id] = false;
-		this._hasCalled[player.id] = false;
 
 		this.pushState();
 		return true;
@@ -66,23 +46,18 @@ export class Game {
 
 	public leave(player: Player): void {
 		this._players[player.id] = null;
-		this._inRound[player.id] = null;
-		this._bets[player.id] = null;
-		this._hands[player.id] = null;
-		this._hasRaised[player.id] = null;
-		this._hasCalled[player.id] = null;
 		this.pushState();
 	}
 
 	private newGame(): void {
-		this._inRound = [...this._players];
+		this._players.forEach(p => p.inGame = true);
 		this._currPlayerIndex = 0;
 		this._stack = Cards.newDeck();
 		this._tableCards = [];
-		for (let i = 0; i < this._players.length; i++) {
-			if (this._players[i]) {
-				this._hands[i] = this._stack.splice(0, 2);
-				this._bets[i] = 0;
+		for (let player of this._players) {
+			if (player) {
+				player.bet = 0;
+				player.hand = this._stack.splice(0, 2);
 			}
 		}
 		this._pot = 0;
@@ -91,11 +66,11 @@ export class Game {
 	}
 
 	private newRound(): void {
-		for (let i = 0; i < this._players.length; i++) {
-			if (this._players[i]) {
-				this._bets[i] = 0;
-				this._hasRaised[i] = false;
-				this._hasCalled[i] = false;
+		for (let player of this._players) {
+			if (player) {
+				player.bet = 0;
+				player.hasRaised = false;
+				player.hasCalled = false;
 			}
 		}
 		this._lastBet = 0;
@@ -117,16 +92,17 @@ export class Game {
 	}
 
 	private checkWin(): void {
-		this.win(this._inRound[Math.floor(Math.random() * this._inRound.length)]);
+		// this.win(this._inRound[Math.floor(Math.random() * this._inRound.length)]);
 	}
 
 	private endTurn(): boolean {
+		this.currPlayer.hasCalled = true;
 		if (this.inRoundPlayers().length === 1) {
 			this.win(this.inRoundPlayers()[0]);
 		}
 		do {
 			this._currPlayerIndex = (this._currPlayerIndex + 1) % this._players.length;
-		} while (this._inRound.find(p => p.id === this._players[this._currPlayerIndex].id));
+		} while (this._players[this._currPlayerIndex].inGame);
 		if (this.canStartNextRound()) {
 			this.newRound();
 		}
@@ -135,9 +111,9 @@ export class Game {
 	}
 
 	private canStartNextRound(): boolean {
-		const bet = this._bets[this.inRoundPlayers()[0].id];
+		const bet = this.inRoundPlayers()[0].bet;
 		for (const player of this.inRoundPlayers()) {
-			if (!this._hasCalled[player.id] || this._bets[player.id] !== bet) {
+			if (!player.hasCalled || player.bet !== bet) {
 				return false;
 			}
 		}
@@ -145,36 +121,36 @@ export class Game {
 	}
 
 	public fold(): boolean {
-		this._inRound[this.currPlayer.id] = null;
+		this.currPlayer.inGame = false;
 		return this.endTurn();
 	}
 
 	public call(): boolean {
-		if (!this.bet(this._lastBet - this._bets[this._currPlayerIndex])) {
+		if (!this.bet(this._lastBet - this.currPlayer.bet)) {
 			return false;
 		}
 		return this.endTurn();
 	}
 
 	public check(): boolean {
-		if (this._lastBet !== this._bets[this._currPlayerIndex])
+		if (this._lastBet !== this.currPlayer.bet)
 			return false;
 		return this.endTurn();
 	}
 
 	public raise(bet: number): boolean {
-		if (!this.bet(bet - this._bets[this._currPlayerIndex])
-			|| this._hasRaised[this._currPlayerIndex]) {
+		if (!this.bet(bet - this.currPlayer.bet)
+			|| this.currPlayer.hasRaised) {
 			return false;
 		}
 		this._lastBet = bet;
-		this._hasRaised[this._currPlayerIndex] = true;
+		this.currPlayer.hasRaised = true;
 		return this.endTurn();
 	}
 
 	private bet(amount: number): boolean {
 		if (this.hasAmount(amount)) {
-			this._bets[this._currPlayerIndex] += amount;
+			this.currPlayer.bet += amount;
 			this.currPlayer.budget -= amount;
 			return true;
 		}
@@ -187,7 +163,7 @@ export class Game {
 	}
 
 	private inRoundPlayers(): Player[] {
-		return this._inRound.filter(p => p !== null);
+		return this._players.filter(p => p !== null && p.inGame);
 	}
 
 	private hasAmount(amount: number): boolean {
@@ -204,20 +180,21 @@ export class Game {
 		this._players.forEach((player) => {
 			player.sendState({
 				id: player.id,
+				hand: player.hand,
 				players: this._players.map(p => {
-					return {
+					return p ? {
 						id: p.id,
 						name: p.name,
-						budget: p.budget
-					};
+						budget: p.budget,
+						bet: p.bet,
+						inGame: p.inGame,
+						hasRaised: p.hasRaised
+					} : null;
 				}),
 				currPlayerIndex: this._currPlayerIndex,
-				inRound: this._inRound.map(p => p !== null),
-				bets: this._bets,
 				pot: this._pot,
 				lastBet: this._lastBet,
-				tableCards: this._tableCards,
-				hand: this._hands[player.id]
+				tableCards: this._tableCards
 			});
 		});
 	}
