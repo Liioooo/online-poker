@@ -1,0 +1,10 @@
+<div class="modal-body">
+	<div class="form-group">
+		<label for="gameLink">Your Name</label>
+		<input type="text" class="form-control" id="gameLink" [(ngModel)]="name">
+	</div>
+</div>
+<div class="modal-footer">
+	<button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+	<button type="button" class="btn btn-primary" [disabled]="!name" (click)="joinGameClick()">Join Game</button>
+</div>

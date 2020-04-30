@@ -18,8 +18,15 @@ export class JoinGamePopupComponent extends PopupContentCompDirective<string> {
 	}
 
 	public async joinGameClick() {
+		let gameId: string;
+		if (this.gameLink.startsWith('http')) {
+			gameId = this.gameLink.substring(this.gameLink.lastIndexOf('/') + 1);
+		} else {
+			gameId = this.gameLink;
+		}
+
 		const gameData: JoinGameData = {
-			gameId: this.gameLink,
+			gameId,
 			playerName: this.inputFromOpener
 		};
 		try {

@@ -14,7 +14,7 @@ export class FooterComponent implements OnInit {
 	ngOnInit(): void {
 	}
 
-	private get hasGame(): boolean {
+	public get hasGame(): boolean {
 		return !!this.gameService.game;
 	}
 
