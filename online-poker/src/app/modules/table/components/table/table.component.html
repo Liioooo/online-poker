@@ -6,35 +6,34 @@
 	</div>
 	<div class="center d-flex justify-content-center align-items-center">
 		<div>
-			<h1 class="text-center">500</h1>
+			<h1 class="text-center">{{game?.pot}}</h1>
 			<div class="d-flex justify-content-center center-cards">
-				<img src="assets/cards/C0.svg" class="poker-card m-1">
-				<img src="assets/cards/C0.svg" class="poker-card m-1">
-				<img src="assets/cards/C0.svg" class="poker-card m-1">
-				<img src="assets/cards/C0.svg" class="poker-card m-1">
-				<img src="assets/cards/C0.svg" class="poker-card m-1">
+				<img *ngFor="let card of game?.tableCards" [src]="'assets/cards/' + card + '.svg'" class="poker-card m-1">
 			</div>
 		</div>
 		<div class="players">
-			<app-player positionX="-37vw" positionY="1vh"></app-player>
-			<app-player positionX="0" positionY="-25vh"></app-player>
-			<app-player positionX="-25vw" positionY="-15vh"></app-player>
-			<app-player positionX="25vw" positionY="-15vh"></app-player>
-			<app-player positionX="25vw" positionY="22vh"></app-player>
-			<app-player positionX="-25vw" positionY="22vh"></app-player>
-			<app-player positionX="0" positionY="30vh"></app-player>
-			<app-player positionX="37vw" positionY="1vh"></app-player>
+			<app-player *ngIf="game?.players[0]" [player]="game.players[0]" positionX="0" positionY="30vh"></app-player>
+			<app-player *ngIf="game?.players[1]" [player]="game.players[1]" positionX="25vw" positionY="22vh"></app-player>
+			<app-player *ngIf="game?.players[2]" [player]="game.players[2]" positionX="37vw" positionY="1vh"></app-player>
+			<app-player *ngIf="game?.players[3]" [player]="game.players[3]" positionX="25vw" positionY="-15vh"></app-player>
+			<app-player *ngIf="game?.players[4]" [player]="game.players[4]" positionX="0" positionY="-25vh"></app-player>
+			<app-player *ngIf="game?.players[5]" [player]="game.players[5]" positionX="-25vw" positionY="-15vh"></app-player>
+			<app-player *ngIf="game?.players[6]" [player]="game.players[6]" positionX="-37vw" positionY="1vh"></app-player>
+			<app-player *ngIf="game?.players[7]" [player]="game.players[7]" positionX="-25vw" positionY="22vh"></app-player>
 		</div>
 	</div>
 	<div class="controls d-flex justify-content-between">
 		<div class="m-2"></div>
 		<div class="m-2 p-2 border rounded-sm d-flex align-items-center">
-			<input type="number" class="amount-input form-control form-control-lg border-success h-100" min="0">
-			<button type="button" class="action-btn btn btn-outline-success h-100 ml-2">Call 100</button>
-			<button type="button" class="action-btn btn btn-outline-success h-100 ml-2">Check</button>
-			<button type="button" class="action-btn btn btn-outline-success h-100 ml-2">Raise 100</button>
-			<button type="button" class="action-btn btn btn-outline-success h-100 ml-2">Bet 50</button>
-			<button type="button" class="action-btn btn btn-outline-danger h-100 ml-2">Fold</button>
+			<ng-container *ngIf="game?.hasStarted">
+				<input *ngIf="game?.canRaise || game?.canBet" type="number" class="amount-input form-control form-control-lg border-success h-100" min="0">
+				<button *ngIf="game?.canCall" type="button" class="action-btn btn btn-outline-success h-100 ml-2">Call 100</button>
+				<button *ngIf="game?.canCheck" type="button" class="action-btn btn btn-outline-success h-100 ml-2">Check</button>
+				<button *ngIf="game?.canRaise" type="button" class="action-btn btn btn-outline-success h-100 ml-2">Raise 100</button>
+				<button *ngIf="game?.canBet" type="button" class="action-btn btn btn-outline-success h-100 ml-2">Bet 50</button>
+				<button *ngIf="game?.canFold" type="button" class="action-btn btn btn-outline-danger h-100 ml-2">Fold</button>
+			</ng-container>
+			<button *ngIf="!game?.hasStarted" type="button" class="action-btn btn btn-outline-success h-100">Start Game</button>
 		</div>
 	</div>
 </div>

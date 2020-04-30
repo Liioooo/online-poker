@@ -1,11 +1,11 @@
 <div class="player bg-secondary rounded-sm p-2" [ngStyle]="{top: positionY, left: positionX}">
 	<div class="content-text">
-		<h4>Keko</h4>
-		<p class="coins">1000</p>
+		<h4>{{player.name}}</h4>
+		<p class="coins">{{player.budget || 0}}</p>
 	</div>
-	<span class="bet-amount badge badge-info">100</span>
-	<div class="cards">
-		<img src="assets/cards/C5.svg" class="poker-card">
-		<img src="assets/cards/C0.svg" class="poker-card ml-1">
+	<span class="bet-amount badge badge-info" *ngIf="player.bet && player.bet > 0">{{player.bet}}</span>
+	<div class="cards" *ngIf="player.hand">
+		<img [src]="'assets/cards/' + player.hand[0] + '.svg'" class="poker-card">
+		<img [src]="'assets/cards/' + player.hand[1] + '.svg'" class="poker-card ml-1">
 	</div>
 </div>

@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {Player} from '../../../../shared/models/player';
 
 @Component({
 	selector: 'app-player',
@@ -12,6 +13,9 @@ export class PlayerComponent implements OnInit {
 
 	@Input()
 	public positionY: number;
+
+	@Input()
+	public player: Player;
 
 	constructor() {
 	}
