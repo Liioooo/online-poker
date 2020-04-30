@@ -136,6 +136,7 @@ export class Game {
 				this.checkWin();
 				this.newGame();
 		}
+		this.pushState();
 	}
 
 	private checkWin(): void {
@@ -151,7 +152,7 @@ export class Game {
 		}
 		do {
 			this._currPlayerIndex = (this._currPlayerIndex + 1) % this._players.length;
-		} while (this._players[this._currPlayerIndex].inGame);
+		} while (!(this._players[this._currPlayerIndex] && this._players[this._currPlayerIndex].inGame));
 		if (this.canStartNextRound()) {
 			this.newRound();
 		}
