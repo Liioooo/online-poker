@@ -41,7 +41,7 @@ export class Game {
 		if (playerCount >= this._playerLimit)
 			return false;
 		if (playerCount === this._players.length) {
-			this._players.push(player);
+			this._players.push(null);
 		}
 		for (let i = 0; i < this._players.length; i++) {
 			if (!this._players[i]) {
