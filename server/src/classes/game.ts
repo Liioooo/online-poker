@@ -68,6 +68,7 @@ export class Game {
 	private newRound(): void {
 		for (let player of this._players) {
 			if (player) {
+				this._pot += player.bet;
 				player.bet = 0;
 				player.hasRaised = false;
 				player.hasCalled = false;
