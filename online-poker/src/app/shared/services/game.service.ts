@@ -31,6 +31,15 @@ export class GameService {
 		this.router.navigate(['/']);
 	}
 
+	public startGame() {
+		if (this.game.performedAction) return;
+		this.game.performedAction = true;
+		this.webSocket.send({
+			event: Event.START_GAME,
+			data: null
+		});
+	}
+
 	public call() {
 		if (this.game.performedAction || !this.game.canCall) return;
 		this.game.performedAction = true;

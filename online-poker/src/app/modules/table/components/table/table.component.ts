@@ -52,6 +52,7 @@ export class TableComponent implements OnInit {
 	}
 
 	public startGame() {
+		this.gameService.startGame();
 	}
 
 	public fold() {
