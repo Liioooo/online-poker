@@ -52,6 +52,11 @@ export class WebsocketService {
 		});
 	}
 
+	public disconnect() {
+		this._subscription.unsubscribe();
+		delete this._currentGame;
+	}
+
 	private receive(msg: Message & ErrorMessage): void {
 		if (msg.error) {
 			console.error(msg.error);

@@ -1,9 +1,10 @@
 <div class="table-page">
 	<ng-container *ngIf="game; else loading">
-		<div class="top-bar d-flex align-items-center">
+		<div class="top-bar d-flex align-items-center justify-content-between">
 			<h4 class="ml-2 my-0" *ngIf="game">
 				Blind: {{game.smallBlind}} / {{game.bigBlind}}
 			</h4>
+			<button type="button" class="btn btn-outline-danger mr-2" (click)="leave()">Leave</button>
 		</div>
 		<div class="center d-flex justify-content-center align-items-center">
 			<div>

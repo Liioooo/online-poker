@@ -27,7 +27,8 @@ export class GameService {
 	}
 
 	public leaveGame() {
-
+		this.webSocket.disconnect();
+		this.router.navigate(['/']);
 	}
 
 	public call() {
