@@ -2,18 +2,17 @@ import {Cards, playingCard} from '../models/cards';
 
 export class WinDetection {
 
-	// TODO
 	public static getWinners(tableCards: playingCard[], hands: playingCard[][]): number[] {
 		let rankings: number[][] = [];
 		for (let hand of hands)
 			rankings.push(WinDetection.getRanking(tableCards.concat(hand)));
-		rankings = rankings.sort((a, b) => {
+		rankings = rankings.sort((b, a) => {
 			return WinDetection.rankingDiff(b, a);
 		});
 
 		const winners = [rankings.pop()];
 		let other;
-		while (WinDetection.rankingDiff(winners[0], other = rankings.pop()) === 0) {
+		while (rankings.length > 0 && WinDetection.rankingDiff(winners[0], other = rankings.pop()) === 0) {
 			winners.push(other);
 		}
 		console.log(winners);
@@ -40,6 +39,17 @@ export class WinDetection {
 		console.log(map);
 		for (const val of map.values()) {
 			console.log(val / count * 100 + '%');
+		}
+	}
+
+	public static randomWinCheck(count: number) {
+		for (let i = 0; i < count; i++) {
+			const cardsTable = Cards.newDeck().slice(0, 5);
+			const cards0 = Cards.newDeck().slice(0, 2);
+			const cards1 = Cards.newDeck().slice(0, 2);
+			const cards2 = Cards.newDeck().slice(0, 2);
+			console.log(cardsTable, cards0, cards1, cards2);
+			WinDetection.getWinners(cardsTable, [cards0, cards1, cards2]);
 		}
 	}
 
@@ -206,8 +216,8 @@ export class WinDetection {
 		const highest = WinDetection.highestCard(cards.filter(c =>
 				Cards.numbersIndex.get(c[1]) !== pair0Val && Cards.numbersIndex.get(c[1]) !== pair1Val
 			));
-		return [2, pair0Val < pair1Val ? pair0Val : pair1Val,
-			pair0Val < pair1Val ? pair1Val : pair0Val, Cards.numbersIndex.get(highest[1])];
+		return [2, pair0Val > pair1Val ? pair0Val : pair1Val,
+			pair0Val > pair1Val ? pair1Val : pair0Val, Cards.numbersIndex.get(highest[1])];
 	}
 
 	private static onePair(cards: playingCard[]): number[] {
