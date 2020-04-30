@@ -10,6 +10,8 @@ export class Game {
 	private START_BUDGET = 10000;
 	private _playerLimit = 8;
 
+	private _hasStarted = false;
+
 	private _players: Player[];
 	private _currPlayerIndex: number;
 
@@ -47,10 +49,24 @@ export class Game {
 
 	public leave(player: Player): void {
 		this._players[player.id] = null;
+		let deleteGame = true;
+		for (const player of this._players) {
+			if (player) {
+				deleteGame = false;
+				break;
+			}
+		}
+		if (deleteGame)
+			this.deleteGame();
 		this.pushState();
 	}
 
+	private deleteGame() {
+		// TODO Andi
+	}
+
 	private newGame(): void {
+		this._hasStarted = true;
 		this._players.forEach(p => p.inGame = true);
 		this._currPlayerIndex = 0;
 		this._stack = Cards.newDeck();
@@ -197,7 +213,8 @@ export class Game {
 				currPlayerIndex: this._currPlayerIndex,
 				pot: this._pot,
 				lastBet: this._lastBet,
-				tableCards: this._tableCards
+				tableCards: this._tableCards,
+				hasStarted: this._hasStarted
 			});
 		});
 	}
