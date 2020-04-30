@@ -14,7 +14,7 @@ export class WinDetection {
 		const winners = [players.pop()];
 		let other;
 		while (players.length > 0 &&
-			WinDetection.rankingDiff(rankings.get(winners[0]), other = rankings.get(winners.pop())) === 0) {
+			WinDetection.rankingDiff(rankings.get(winners[0]), other = rankings.get(players.pop())) === 0) {
 			winners.push(other);
 		}
 		return winners;

@@ -134,14 +134,15 @@ export class Game {
 				break;
 			default:
 				this.checkWin();
-				this.newGame();
+				this._hasStarted = false;
+				// this.newGame();
 		}
 		this.pushState();
 	}
 
 	private checkWin(): void {
 		const winners = WinDetection.getWinners(this._tableCards, this.inGamePlayers());
-		console.log(winners);
+		console.log('winners: ', winners.map(p => p.name));
 	}
 
 	private endTurn(isSmallBlind?: boolean): boolean {
