@@ -4,8 +4,8 @@
 			<a class="nav-link" href="#">Github Project</a>
 		</li>
 	</ul>
-	<div class="navbar-text d-flex align-items-center invite">
-		<p class="mr-2">Invite Link: http://localhost/table/45465465465</p>
-		<button class="btn btn-secondary" type="submit">Copy</button>
+	<div class="navbar-text d-flex align-items-center invite" *ngIf="hasGame">
+		<p class="mr-2">{{inviteLink}}</p>
+		<button class="btn btn-secondary" (click)="copyClick()">Copy</button>
 	</div>
 </footer>
