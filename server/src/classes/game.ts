@@ -33,9 +33,6 @@ export class Game {
 		if (playerCount)
 			this._playerLimit = playerCount;
 		this._players = [];
-		do {
-			this._smallBlindIndex = Math.random() * this._players.length;
-		} while (!this._players[this._smallBlindIndex]);
 	}
 
 	public join(player: Player): boolean {
@@ -84,6 +81,11 @@ export class Game {
 	}
 
 	private newGame(): void {
+		if (!this._hasStarted) {
+			do {
+				this._smallBlindIndex = Math.floor(Math.random() * this._players.length);
+			} while (!this._players[this._smallBlindIndex]);
+		}
 		this._hasStarted = true;
 		this._players.forEach(p => { if (p) p.inGame = true });
 		this._smallBlindIndex = this.bigBlindIndex;
