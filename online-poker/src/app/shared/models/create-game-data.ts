@@ -1,6 +1,6 @@
 export interface CreateGameData {
 	playerName: string;
-	stackSize: number;
+	buyIn: number;
 	bigBlind: number;
 	smallBlind: number;
 }

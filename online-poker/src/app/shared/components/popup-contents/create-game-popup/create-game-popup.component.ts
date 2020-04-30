@@ -20,7 +20,7 @@ export class CreateGamePopupComponent extends PopupContentCompDirective<string> 
 
 	ngOnInit(): void {
 		this.createForm = this.formBuilder.group({
-			stackSize: [500, [Validators.required, Validators.min(1)]],
+			buyIn: [500, [Validators.required, Validators.min(1)]],
 			smallBlind: [10, [Validators.required, Validators.min(1)]],
 			bigBlind: [20, [Validators.required, Validators.min(1)]]
 		});

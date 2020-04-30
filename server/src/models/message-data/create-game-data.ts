@@ -1,6 +1,6 @@
 export interface CreateGameData {
 	playerName: string;
-	stackSize: number;
+	buyIn: number;
 	bigBlind: number;
 	smallBlind: number;
 }
@@ -8,7 +8,7 @@ export interface CreateGameData {
 export function parseCreateGameData(object: any): CreateGameData {
 	if (
 		typeof object.playerName === 'string' &&
-		typeof object.stackSize === 'number' &&
+		typeof object.buyIn === 'number' &&
 		typeof object.bigBlind === 'number' &&
 		typeof object.smallBlind === 'number'
 	)

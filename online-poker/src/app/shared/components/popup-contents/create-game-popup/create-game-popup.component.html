@@ -1,11 +1,11 @@
 <div class="modal-body">
 	<form [formGroup]="createForm">
 		<div class="form-group">
-			<label for="stack-size">Stack size</label>
-			<input formControlName="stackSize" type="number" class="form-control" id="stack-size" min="1" [class.is-invalid]="createForm.controls.stackSize.invalid">
+			<label for="stack-size">Buy In</label>
+			<input formControlName="buyIn" type="number" class="form-control" id="stack-size" min="1" [class.is-invalid]="createForm.controls.buyIn.invalid">
 			<div class="invalid-feedback">
-				<ng-container *ngIf="createForm.controls.stackSize.errors?.required">Stack size is required</ng-container>
-				<ng-container *ngIf="createForm.controls.stackSize.errors?.min">Stack size must be higher than 1</ng-container>
+				<ng-container *ngIf="createForm.controls.buyIn.errors?.required">Buy In is required</ng-container>
+				<ng-container *ngIf="createForm.controls.buyIn.errors?.min">Buy In must be higher than 1</ng-container>
 			</div>
 		</div>
 		<div class="row">

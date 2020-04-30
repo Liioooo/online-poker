@@ -9,4 +9,6 @@ export interface UpdateEventData {
 	pot: number;
 	lastBet: number;
 	tableCards: string[];
+	smallBlindAmount: number;
+	bigBlindAmount: number;
 }

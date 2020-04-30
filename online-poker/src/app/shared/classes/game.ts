@@ -10,6 +10,8 @@ export class Game {
 	private _currPlayerIndex: number;
 	private _players: Player[] = [];
 	private _lastBet: number;
+	private _smallBlind: number;
+	private _bigBlind: number;
 
 	private _playerHand: string[];
 	private _playerId: number;
@@ -34,6 +36,8 @@ export class Game {
 		this._currPlayerIndex = data.currPlayerIndex;
 		this._players = data.players;
 		this._lastBet = data.lastBet;
+		this._smallBlind = data.smallBlindAmount;
+		this._bigBlind = data.bigBlindAmount;
 
 		this._isPlayerTurn = this._currPlayerIndex === this._playerId && this._hasStarted;
 
@@ -112,6 +116,14 @@ export class Game {
 
 	get playerBudget(): number {
 		return this._players[this._playerId].budget;
+	}
+
+	get smallBlind(): number {
+		return this._smallBlind;
+	}
+
+	get bigBlind(): number {
+		return this._bigBlind;
 	}
 
 	get hasStarted(): boolean {
