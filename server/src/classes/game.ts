@@ -7,7 +7,7 @@ export class Game {
 
 	public readonly id = Uuidv4();
 
-	private START_BUDGET = 10000;
+	private _buyIn: number;
 	private _playerLimit = 8;
 
 	private _hasStarted = false;
@@ -20,13 +20,16 @@ export class Game {
 	private _lastBet: number;
 
 	private _smallBlindAmount: number;
+	private _bigBlindAmount: number;
 
 	private _stack: playingCard[];
 	private _tableCards: playingCard[];
 	private _roundNum: number;
 
-	constructor(smallBlindAmount: number, playerCount?: number) {
+	constructor(smallBlindAmount: number, bigBlindAmount: number, buyIn: number, playerCount?: number) {
 		this._smallBlindAmount = smallBlindAmount;
+		this._bigBlindAmount = bigBlindAmount;
+		this._buyIn = buyIn;
 		if (playerCount)
 			this._playerLimit = playerCount;
 		this._players = [];
@@ -36,7 +39,7 @@ export class Game {
 	}
 
 	public join(player: Player): boolean {
-		player.budget = this.START_BUDGET;
+		player.budget = this._buyIn;
 		const playerCount = this._players.filter(p => p !== null).length;
 		if (playerCount >= this._playerLimit)
 			return false;
@@ -112,7 +115,7 @@ export class Game {
 			case 0:
 				this.bet(this._smallBlindAmount);
 				this.endTurn(true);
-				this.bet(this._smallBlindAmount * 2);
+				this.bet(this._bigBlindAmount);
 				this.endTurn();
 				break;
 			case 1:
@@ -252,7 +255,8 @@ export class Game {
 				lastBet: this._lastBet,
 				tableCards: this._tableCards,
 				hasStarted: this._hasStarted,
-				smallBlindAmount: this._smallBlindAmount
+				smallBlindAmount: this._smallBlindAmount,
+				bigBlindAmount: this._bigBlindAmount
 			});
 		});
 	}

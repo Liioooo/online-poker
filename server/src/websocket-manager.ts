@@ -42,7 +42,7 @@ export class WebsocketManager {
 					}));
 					return;
 				}
-				const game = new Game(420); // TODO Andi
+				const game = new Game(data.smallBlind, data.bigBlind, data.stackSize);
 				const player = new Player(socket, data.playerName, game);
 				this.games.set(game.id, game);
 				socket.send(JSON.stringify({
