@@ -243,6 +243,8 @@ export class Game {
 
 	private pushState() {
 		this._players.forEach((player) => {
+			if (!player)
+				return;
 			player.sendState({
 				id: player.id,
 				hand: player.hand,
