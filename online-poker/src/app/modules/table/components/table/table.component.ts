@@ -47,6 +47,10 @@ export class TableComponent implements OnInit {
 		return this.gameService.game;
 	}
 
+	public leave() {
+		this.gameService.leaveGame();
+	}
+
 	public startGame() {
 	}
 

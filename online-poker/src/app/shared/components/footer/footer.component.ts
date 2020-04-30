@@ -19,7 +19,7 @@ export class FooterComponent implements OnInit {
 	}
 
 	public get inviteLink(): string {
-		return location.origin + '/' + this.gameService.game.gameId;
+		return location.origin + '/table/' + this.gameService.game.gameId;
 	}
 
 	public copyClick() {
