@@ -1,22 +1,23 @@
 import {Cards, playingCard} from '../models/cards';
+import {Player} from './player';
 
 export class WinDetection {
 
-	public static getWinners(tableCards: playingCard[], hands: playingCard[][]): number[] {
-		let rankings: number[][] = [];
-		for (let hand of hands)
-			rankings.push(WinDetection.getRanking(tableCards.concat(hand)));
-		rankings = rankings.sort((b, a) => {
-			return WinDetection.rankingDiff(b, a);
+	public static getWinners(tableCards: playingCard[], players: Player[]): Player[] {
+		let rankings = new Map<Player, number[]>();
+		for (let player of players)
+			rankings.set(player, WinDetection.getRanking(tableCards.concat(player.hand)));
+		players = players.sort((a, b) => {
+			return WinDetection.rankingDiff(rankings.get(a), rankings.get(b));
 		});
 
-		const winners = [rankings.pop()];
+		const winners = [players.pop()];
 		let other;
-		while (rankings.length > 0 && WinDetection.rankingDiff(winners[0], other = rankings.pop()) === 0) {
+		while (players.length > 0 &&
+			WinDetection.rankingDiff(rankings.get(winners[0]), other = rankings.get(winners.pop())) === 0) {
 			winners.push(other);
 		}
-		console.log(winners);
-		return [0];
+		return winners;
 	}
 
 	private static rankingDiff(a: number[], b: number[]): number {
@@ -39,17 +40,6 @@ export class WinDetection {
 		console.log(map);
 		for (const val of map.values()) {
 			console.log(val / count * 100 + '%');
-		}
-	}
-
-	public static randomWinCheck(count: number) {
-		for (let i = 0; i < count; i++) {
-			const cardsTable = Cards.newDeck().slice(0, 5);
-			const cards0 = Cards.newDeck().slice(0, 2);
-			const cards1 = Cards.newDeck().slice(0, 2);
-			const cards2 = Cards.newDeck().slice(0, 2);
-			console.log(cardsTable, cards0, cards1, cards2);
-			WinDetection.getWinners(cardsTable, [cards0, cards1, cards2]);
 		}
 	}
 

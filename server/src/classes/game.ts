@@ -94,12 +94,8 @@ export class Game {
 	}
 
 	private checkWin(): void {
-		const hands = [];
-		for (const player of this.inRoundPlayers())
-			hands.push(player.hand);
-
-		WinDetection.getWinners(this._tableCards, hands);
-		// this.win(this._inRound[Math.floor(Math.random() * this._inRound.length)]);
+		const winners = WinDetection.getWinners(this._tableCards, this.inRoundPlayers());
+		console.log(winners);
 	}
 
 	private endTurn(): boolean {
