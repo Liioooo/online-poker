@@ -50,7 +50,7 @@ export class Game {
 				break;
 			}
 		}
-
+		console.log(`${player.name} joined the game ${this.id}`);
 		this.pushState();
 		return true;
 	}
@@ -64,8 +64,9 @@ export class Game {
 			if (this._smallBlindIndex === player.id) {
 				this._smallBlindIndex = this.bigBlindIndex;
 			}
-			this._players[player.id] = null;
 		}
+		this._players[player.id] = null;
+		console.log(`${player.name} left the game ${this.id}`);
 		let deleteGame = true;
 		for (const player of this._players) {
 			if (player) {
@@ -79,6 +80,7 @@ export class Game {
 	}
 
 	private deleteGame() {
+		console.log(`Deleted game ${this.id}`);
 		// TODO Andi
 	}
 
