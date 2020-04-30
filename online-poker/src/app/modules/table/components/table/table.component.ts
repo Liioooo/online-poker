@@ -35,6 +35,14 @@ export class TableComponent implements OnInit {
 		}
 	}
 
+	public get canStart(): boolean {
+		return !this.game.hasStarted && this.game.players.filter(p => !!p).length >= 2;
+	}
+
+	public get waitingForPlayers(): boolean {
+		return this.game.players.filter(p => !!p).length < 2
+	}
+
 	public get game(): Game {
 		return this.gameService.game;
 	}

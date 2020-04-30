@@ -1,39 +1,46 @@
 <div class="table-page">
-	<div class="top-bar d-flex align-items-center">
-		<h4 class="ml-2 my-0" *ngIf="game">
-			Blind: {{game?.smallBlind}} / {{game?.bigBlind}}
-		</h4>
-	</div>
-	<div class="center d-flex justify-content-center align-items-center">
-		<div>
-			<h1 class="text-center">{{game?.pot}}</h1>
-			<div class="d-flex justify-content-center center-cards">
-				<img *ngFor="let card of game?.tableCards" [src]="'assets/cards/' + card + '.svg'" class="poker-card m-1">
+	<ng-container *ngIf="game; else loading">
+		<div class="top-bar d-flex align-items-center">
+			<h4 class="ml-2 my-0" *ngIf="game">
+				Blind: {{game.smallBlind}} / {{game.bigBlind}}
+			</h4>
+		</div>
+		<div class="center d-flex justify-content-center align-items-center">
+			<div>
+				<h1 class="text-center">{{game.pot}}</h1>
+				<div class="d-flex justify-content-center center-cards">
+					<img *ngFor="let card of game.tableCards" [src]="'assets/cards/' + card + '.svg'" class="poker-card m-1">
+				</div>
+			</div>
+			<div class="players">
+				<app-player *ngIf="game.players[0]" [player]="game.players[0]" positionX="0" positionY="30vh"></app-player>
+				<app-player *ngIf="game.players[1]" [player]="game.players[1]" positionX="25vw" positionY="22vh"></app-player>
+				<app-player *ngIf="game.players[2]" [player]="game.players[2]" positionX="37vw" positionY="1vh"></app-player>
+				<app-player *ngIf="game.players[3]" [player]="game.players[3]" positionX="25vw" positionY="-15vh"></app-player>
+				<app-player *ngIf="game.players[4]" [player]="game.players[4]" positionX="0" positionY="-25vh"></app-player>
+				<app-player *ngIf="game.players[5]" [player]="game.players[5]" positionX="-25vw" positionY="-15vh"></app-player>
+				<app-player *ngIf="game.players[6]" [player]="game.players[6]" positionX="-37vw" positionY="1vh"></app-player>
+				<app-player *ngIf="game.players[7]" [player]="game.players[7]" positionX="-25vw" positionY="22vh"></app-player>
 			</div>
 		</div>
-		<div class="players">
-			<app-player *ngIf="game?.players[0]" [player]="game.players[0]" positionX="0" positionY="30vh"></app-player>
-			<app-player *ngIf="game?.players[1]" [player]="game.players[1]" positionX="25vw" positionY="22vh"></app-player>
-			<app-player *ngIf="game?.players[2]" [player]="game.players[2]" positionX="37vw" positionY="1vh"></app-player>
-			<app-player *ngIf="game?.players[3]" [player]="game.players[3]" positionX="25vw" positionY="-15vh"></app-player>
-			<app-player *ngIf="game?.players[4]" [player]="game.players[4]" positionX="0" positionY="-25vh"></app-player>
-			<app-player *ngIf="game?.players[5]" [player]="game.players[5]" positionX="-25vw" positionY="-15vh"></app-player>
-			<app-player *ngIf="game?.players[6]" [player]="game.players[6]" positionX="-37vw" positionY="1vh"></app-player>
-			<app-player *ngIf="game?.players[7]" [player]="game.players[7]" positionX="-25vw" positionY="22vh"></app-player>
+		<div class="controls d-flex justify-content-between">
+			<div class="m-2"></div>
+			<div class="m-2 p-2 border rounded-sm d-flex align-items-center" *ngIf="game.hasStarted || canStart || waitingForPlayers">
+				<ng-container *ngIf="game.hasStarted">
+					<input *ngIf="game.canRaise || game.canBet" type="number" class="amount-input form-control form-control-lg border-success h-100" min="0" [(ngModel)]="betAmount" [max]="game.playerBudget">
+					<button *ngIf="game.canCall" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="call()">Call {{game.toCall}}</button>
+					<button *ngIf="game.canCheck" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="check()">Check</button>
+					<button *ngIf="game.canRaise" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="raise()">Raise {{betAmount}}</button>
+					<button *ngIf="game.canBet" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="bet()">Bet {{betAmount}}</button>
+					<button *ngIf="game.canFold" type="button" class="action-btn btn btn-outline-danger h-100 ml-2" (click)="fold()">Fold</button>
+				</ng-container>
+				<button *ngIf="canStart" type="button" class="action-btn btn btn-outline-success h-100" (click)="startGame()">Start Game</button>
+				<p *ngIf="waitingForPlayers">Waiting for Players</p>
+			</div>
 		</div>
-	</div>
-	<div class="controls d-flex justify-content-between">
-		<div class="m-2"></div>
-		<div class="m-2 p-2 border rounded-sm d-flex align-items-center">
-			<ng-container *ngIf="game?.hasStarted">
-				<input *ngIf="game?.canRaise || game?.canBet" type="number" class="amount-input form-control form-control-lg border-success h-100" min="0" [(ngModel)]="betAmount" [max]="game.playerBudget">
-				<button *ngIf="game?.canCall" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="call()">Call {{game.toCall}}</button>
-				<button *ngIf="game?.canCheck" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="check()">Check</button>
-				<button *ngIf="game?.canRaise" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="raise()">Raise {{betAmount}}</button>
-				<button *ngIf="game?.canBet" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="bet()">Bet {{betAmount}}</button>
-				<button *ngIf="game?.canFold" type="button" class="action-btn btn btn-outline-danger h-100 ml-2" (click)="fold()">Fold</button>
-			</ng-container>
-			<button *ngIf="!game?.hasStarted" type="button" class="action-btn btn btn-outline-success h-100" (click)="startGame()">Start Game</button>
-		</div>
-	</div>
+	</ng-container>
 </div>
+
+<ng-template #loading>
+	<h2 class="text-center m-3">Loading ...</h2>
+</ng-template>
