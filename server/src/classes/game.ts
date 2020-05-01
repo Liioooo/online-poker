@@ -138,16 +138,11 @@ export class Game {
 		this.pushState();
 	}
 
-	private checkWin(): void {
-		const winners = WinDetection.getWinners(this._tableCards, this.inGamePlayers());
-		console.log('winners: ', winners.map(p => p.name));
-	}
-
 	private endTurn(isSmallBlind?: boolean): boolean {
 		if (!isSmallBlind)
 			this.currPlayer.hasCalled = true;
 		if (this.inGamePlayers().length === 1) {
-			this.win(this.inGamePlayers()[0]);
+			this.win(this.inGamePlayers()[0], this._pot);
 		}
 		do {
 			this._currPlayerIndex = (this._currPlayerIndex + 1) % this._players.length;
@@ -234,10 +229,19 @@ export class Game {
 		return this.currPlayer.budget >= amount;
 	}
 
-	private win(player: Player): void {
-		player.budget += this._pot;
-		this._pot = 0;
-		console.log(player.name + ' wins');
+	private checkWin(): void {
+		const winners = WinDetection.getWinners(this._tableCards, this.inGamePlayers());
+		let left = winners.length;
+		for (let winner of winners) {
+			this.win(winner, Math.floor(this._pot / left--));
+		}
+		console.log('winners: ', winners.map(p => p.name));
+	}
+
+	private win(player: Player, amount: number): void {
+		player.budget += amount;
+		this._pot -= amount;
+		console.log(player.name + ' wins ' + amount);
 	}
 
 	private pushState() {
