@@ -71,7 +71,7 @@ export class Game {
 				this._toCall = this._players[this._playerId].budget
 			}
 			this._canBet = this._lastBet === 0 && !this._players[this._playerId].hasRaised && this._players[this._playerId].budget > 0;
-			this._canRaise = this._lastBet > 0 && !this._players[this._playerId].hasRaised && this._players[this._playerId].budget > 0;
+			this._canRaise = this._lastBet > 0 && !this._players[this._playerId].hasRaised && this._players[this._playerId].budget > this._lastBet;
 			this._canFold = true;
 		} else {
 			this._canCheck = false;
