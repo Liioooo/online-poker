@@ -40,7 +40,7 @@ export class TableComponent implements OnInit {
 	}
 
 	public get waitingForPlayers(): boolean {
-		return this.game.players.filter(p => !!p).length < 2
+		return !this.game.hasStarted && this.game.players.filter(p => !!p).length < 2 || this.game.hasStarted && !this.game.isPlayerTurn;
 	}
 
 	public get game(): Game {
