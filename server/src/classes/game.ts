@@ -119,10 +119,8 @@ export class Game {
 		this._lastBet = 0;
 		switch (this._roundNum++) {
 			case 0:
-				this.bet(this._smallBlindAmount);
-				this.endTurn(true);
-				this.bet(this._bigBlindAmount);
-				this.endTurn();
+				this.raise(this._smallBlindAmount, true);
+				this.raise(this._bigBlindAmount);
 				break;
 			case 1:
 				for (let i = 0; i < 3; i++)
@@ -189,14 +187,13 @@ export class Game {
 		return this.endTurn();
 	}
 
-	public raise(bet: number): boolean {
-		if (!this.bet(bet - this.currPlayer.bet)
-			|| this.currPlayer.hasRaised) {
+	public raise(bet: number, isSmallBlind?: boolean): boolean {
+		if (this.currPlayer.hasRaised || this.currPlayer.bet + bet < this._lastBet || !this.bet(bet)) {
 			return false;
 		}
-		this._lastBet = bet;
+		this._lastBet = this.currPlayer.bet;
 		this.currPlayer.hasRaised = true;
-		return this.endTurn();
+		return this.endTurn(isSmallBlind);
 	}
 
 	private bet(amount: number): boolean {
