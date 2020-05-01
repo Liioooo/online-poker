@@ -2,6 +2,7 @@ import {Player} from './player';
 import {Cards, playingCard} from '../models/cards';
 import {v4 as Uuidv4} from 'uuid';
 import {WinDetection} from './win-detection';
+import {Event} from '../models/event';
 
 export class Game {
 
@@ -51,7 +52,7 @@ export class Game {
 			}
 		}
 		console.log(`${player.name} joined the game ${this.id}`);
-		this.pushState();
+		this.pushUpdateState();
 		return true;
 	}
 
@@ -76,7 +77,7 @@ export class Game {
 		}
 		if (deleteGame)
 			this.deleteGame();
-		this.pushState();
+		this.pushUpdateState();
 	}
 
 	private deleteGame() {
@@ -135,14 +136,14 @@ export class Game {
 				this._hasStarted = false;
 				// this.newGame();
 		}
-		this.pushState();
+		this.pushUpdateState();
 	}
 
 	private endTurn(isSmallBlind?: boolean): boolean {
 		if (!isSmallBlind)
 			this.currPlayer.hasCalled = true;
 		if (this.inGamePlayers().length === 1) {
-			this.win(this.inGamePlayers()[0], this._pot);
+			this.win([this.inGamePlayers()[0]], [this._pot]);
 		}
 		do {
 			this._currPlayerIndex = (this._currPlayerIndex + 1) % this._players.length;
@@ -150,7 +151,7 @@ export class Game {
 		if (this.canStartNextRound()) {
 			this.newRound();
 		}
-		this.pushState();
+		this.pushUpdateState();
 		return true;
 	}
 
@@ -233,20 +234,46 @@ export class Game {
 	private checkWin(): void {
 		const winners = WinDetection.getWinners(this._tableCards, this.inGamePlayers());
 		let left = winners.length;
-		for (let winner of winners) {
-			this.win(winner, Math.floor(this._pot / left--));
-		}
+		// for (let winner of winners) {
+		// 	this.win(winners, Math.floor(this._pot / left--));
+		// }
+		this.win(winners, winners.map(_ => this._pot / left--));
 		console.log('winners: ', winners.map(p => p.name));
 	}
 
-	private win(player: Player, amount: number): void {
-		player.budget += amount;
-		this._pot -= amount;
-		console.log(player.name + ' wins ' + amount);
+	private win(players: Player[], amounts: number[]): void {
+		for (let i = 0; i < players.length; i++) {
+			players[i].budget += amounts[i];
+			this._pot -= amounts[i];
+			console.log(players[i].name + ' wins ' + amounts[i]);
+		}
+		this.pushWinState(players.map(p => p.id));
 	}
 
-	private pushState() {
-		this._players.forEach((player) => {
+	private pushWinState(winners: number[]) {
+		this._players.forEach(player => {
+			if (!player)
+				return;
+			player.sendState({
+				id: player.id,
+				players: this._players.map(p => {
+					return p ? {
+						id: p.id,
+						name: p.name,
+						budget: p.budget,
+						inGame: p.inGame,
+						hand: p.inGame ? p.hand : null
+					} : null;
+				}),
+				pot: this._pot,
+				tableCards: this._tableCards,
+				winners
+			}, Event.WIN);
+		})
+	}
+
+	private pushUpdateState() {
+		this._players.forEach(player => {
 			if (!player)
 				return;
 			player.sendState({
@@ -269,7 +296,7 @@ export class Game {
 				hasStarted: this._hasStarted,
 				smallBlindAmount: this._smallBlindAmount,
 				bigBlindAmount: this._bigBlindAmount
-			});
+			}, Event.UPDATE);
 		});
 	}
 }

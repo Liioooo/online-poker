@@ -191,9 +191,9 @@ export class Player {
 		this._hasCalled = value;
 	}
 
-	public sendState(state) {
+	public sendState(state, event) {
 		this._socket.send(JSON.stringify({
-			event: Event.UPDATE,
+			event,
 			data: state
 		}));
 	}

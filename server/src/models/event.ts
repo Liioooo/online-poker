@@ -7,6 +7,7 @@ export const enum Event {
 	CALL,
 	CHECK,
 	FOLD,
+	WIN,
 	SIT_OUT,
 	SIT_IN
 }
