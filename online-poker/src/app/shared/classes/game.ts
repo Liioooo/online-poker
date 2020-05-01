@@ -50,7 +50,7 @@ export class Game {
 				if (!player)
 					continue;
 
-				player.isPlayerTurn = player.id === this._currPlayerIndex
+				player.isPlayerTurn = player.id === this._currPlayerIndex;
 
 				if (player.id === this._playerId && player.inGame) {
 					player.hand = this._playerHand;
@@ -75,10 +75,10 @@ export class Game {
 			this._canFold = true;
 		} else {
 			this._canCheck = false;
-			this._canCall = false
-			this._canBet = false
-			this._canRaise = false
-			this._canFold = false
+			this._canCall = false;
+			this._canBet = false;
+			this._canRaise = false;
+			this._canFold = false;
 		}
 		console.log(this);
 	}
@@ -157,5 +157,9 @@ export class Game {
 
 	set performedAction(value: boolean) {
 		this._performedAction = value;
+	}
+
+	get lastBet(): number {
+		return this._lastBet;
 	}
 }
