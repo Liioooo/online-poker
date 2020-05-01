@@ -14,7 +14,7 @@ export class Game {
 
 	private _players: Player[];
 	private _currPlayerIndex: number;
-	private _smallBlindIndex: number;
+	private _smallBlindIndex: number = -1;
 
 	private _pot: number;
 	private _lastBet: number;
@@ -85,7 +85,7 @@ export class Game {
 	}
 
 	public newGame(): void {
-		if (!this._hasStarted) {
+		if (this._smallBlindIndex < 0) {
 			do {
 				this._smallBlindIndex = Math.floor(Math.random() * this._players.length);
 			} while (!this._players[this._smallBlindIndex]);
@@ -187,7 +187,8 @@ export class Game {
 			return false;
 		}
 		this._lastBet = this.currPlayer.bet;
-		this.currPlayer.hasRaised = true;
+		if (!isSmallBlind)
+			this.currPlayer.hasRaised = true;
 		return this.endTurn(isSmallBlind);
 	}
 
