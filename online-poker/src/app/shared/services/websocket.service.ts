@@ -9,6 +9,7 @@ import {ErrorMessage, Message} from '../models/response/message';
 import {JoinGameResponseData} from '../models/response/join-game-response-data';
 import {Game} from '../classes/game';
 import {UpdateEventData} from '../models/response/update-event-data';
+import {WinEventData} from '../models/response/win-event-data';
 
 @Injectable({
 	providedIn: 'root'
@@ -64,6 +65,9 @@ export class WebsocketService {
 		}
 		if (msg.event === Event.UPDATE && this._currentGame) {
 			this._currentGame.updateState(msg.data as UpdateEventData);
+		}
+		if (msg.event === Event.WIN) {
+			this._currentGame.win(msg.data as WinEventData);
 		}
 	}
 

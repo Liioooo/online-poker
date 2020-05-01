@@ -1,5 +1,6 @@
 import {UpdateEventData} from '../models/response/update-event-data';
 import {Player} from '../models/player';
+import {WinEventData} from '../models/response/win-event-data';
 
 export class Game {
 
@@ -80,7 +81,35 @@ export class Game {
 			this._canRaise = false;
 			this._canFold = false;
 		}
-		console.log(this);
+	}
+
+	win(data: WinEventData) {
+		this._performedAction = false;
+
+		this._isPlayerTurn = false
+		this._canCheck = false;
+		this._canCall = false;
+		this._canBet = false;
+		this._canRaise = false;
+		this._canFold = false;
+
+		this._pot = data.pot;
+		this._tableCards = data.tableCards;
+
+		for (const player of data.players) {
+			if (!player)
+				continue;
+
+			if (player.hand) {
+				this._players[player.id].hand = player.hand;
+			} else if (player.inGame) {
+				player.hand = ['back', 'back'];
+			} else {
+				player.hand = undefined;
+			}
+			this._players[player.id].budget = player.budget;
+			this._players[player.id].inGame = player.inGame;
+		}
 	}
 
 	get gameId(): string {
