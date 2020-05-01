@@ -12,7 +12,7 @@ import {AskForNameComponent} from '../../../../shared/components/popup-contents/
 })
 export class TableComponent implements OnInit {
 
-	public betAmount = 0;
+	public betAmount = 1;
 
 	constructor(
 		private gameService: GameService,
