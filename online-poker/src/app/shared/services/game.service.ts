@@ -59,7 +59,7 @@ export class GameService {
 	}
 
 	public bet(amount: number) {
-		if (this.game.performedAction || !(this.game.canBet && this.game.playerBudget <= amount && amount >= this.game.lastBet)) return;
+		if (this.game.performedAction || !(this.game.canBet && amount <= this.game.playerBudget && amount >= this.game.lastBet)) return;
 		this.game.performedAction = true;
 		this.webSocket.send({
 			event: Event.RAISE,
@@ -79,7 +79,7 @@ export class GameService {
 	}
 
 	public raise(amount: number) {
-		if (this.game.performedAction || !(this.game.canRaise && this.game.playerBudget <= amount && amount >= this.game.lastBet)) return;
+		if (this.game.performedAction || !(this.game.canRaise && amount <= this.game.playerBudget && amount >= this.game.lastBet)) return;
 		this.game.performedAction = true;
 		this.webSocket.send({
 			event: Event.RAISE,
