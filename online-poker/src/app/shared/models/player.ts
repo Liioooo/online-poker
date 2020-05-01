@@ -6,4 +6,5 @@ export interface Player {
 	bet: number;
 	inGame: boolean;
 	hand?: string[];
+	isPlayerTurn?: boolean;
 }

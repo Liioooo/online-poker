@@ -47,10 +47,17 @@ export class Game {
 
 		if (this._hasStarted) {
 			for (const player of this._players) {
-				if (player.id === this._playerId) {
+				if (!player)
+					continue;
+
+				player.isPlayerTurn = player.id === this._currPlayerIndex
+
+				if (player.id === this._playerId && player.inGame) {
 					player.hand = this._playerHand;
-				} else {
+				} else if (player.inGame) {
 					player.hand = ['back', 'back'];
+				} else {
+					player.hand = undefined;
 				}
 			}
 		}
@@ -73,6 +80,7 @@ export class Game {
 			this._canRaise = false
 			this._canFold = false
 		}
+		console.log(this);
 	}
 
 	get gameId(): string {

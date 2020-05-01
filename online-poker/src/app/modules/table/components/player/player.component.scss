@@ -2,9 +2,17 @@
 	position: absolute;
 	width: 14vw;
 	transform: translate(-50%, -50%);
+	min-width: 11rem;
+
+	.progress {
+		position: absolute;
+		width: 14vw;
+		left: 0;
+		bottom: 0;
+	}
 
 	.content-text {
-		margin-left: 6rem;
+		margin-left: 4.5rem;
 
 		.coins {
 			font-size: 1.2rem;
@@ -15,15 +23,21 @@
 		transform: translate(-50%, -50%);
 		position: absolute;
 		top: -20px;
-		left: 8rem;
+		left: 6.2rem;
 		font-size: 1.2rem;
+	}
+
+	.wait {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
 	}
 
 	.cards {
 		position: absolute;
 		transform: translate(-50%, -50%);
 		top: 50%;
-		left: 5%;
+		left: 0;
 		display: flex;
 		flex-direction: row;
 
