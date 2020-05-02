@@ -10,6 +10,9 @@ import {JoinGameResponseData} from '../models/response/join-game-response-data';
 import {Game} from '../classes/game';
 import {UpdateEventData} from '../models/response/update-event-data';
 import {WinEventData} from '../models/response/win-event-data';
+import {Router} from '@angular/router';
+import {PopupService} from './popup.service';
+import {ErrorComponent} from '../components/popup-contents/error/error.component';
 
 @Injectable({
 	providedIn: 'root'
@@ -21,7 +24,7 @@ export class WebsocketService {
 	private _subject: WebSocketSubject<any>;
 	private _subscription: Subscription;
 
-	constructor() {
+	constructor(private router: Router, private popup: PopupService) {
 		this._subject = webSocket({url: 'ws://localhost:8000/ws'});
 	}
 
@@ -29,8 +32,8 @@ export class WebsocketService {
 		return new Promise<string>((resolve, reject) => {
 			this._subscription = this._subject.subscribe(
 				msg => this.receive(msg),
-				err => console.log(err),
-				() => console.log('connection closed') // Called when connection is closed (for whatever reason).
+				err => this.connectionLost(err),
+				() => this.connectionLost()
 			);
 
 			this._subject.pipe(
@@ -51,6 +54,14 @@ export class WebsocketService {
 				data
 			});
 		});
+	}
+
+	public connectionLost(err?: any) {
+		console.log(err);
+		this.disconnect();
+		this.router.navigate(['/']);
+		this.popup.closePopups();
+		this.popup.showPopup(ErrorComponent, 'Connection lost', true, 'The connection to the Game server was lost.');
 	}
 
 	public disconnect() {

@@ -7,6 +7,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
 import { AskForNameComponent } from './components/popup-contents/ask-for-name/ask-for-name.component';
+import { ErrorComponent } from './components/popup-contents/error/error.component';
 
 @NgModule({
 	declarations: [
@@ -14,7 +15,8 @@ import { AskForNameComponent } from './components/popup-contents/ask-for-name/as
 		CreateGamePopupComponent,
 		JoinGamePopupComponent,
 		FooterComponent,
-		AskForNameComponent
+		AskForNameComponent,
+		ErrorComponent
 	],
 	exports: [
 		PopupComponent,

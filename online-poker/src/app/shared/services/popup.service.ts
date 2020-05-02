@@ -1,6 +1,6 @@
 import {
 	ApplicationRef,
-	ComponentFactoryResolver,
+	ComponentFactoryResolver, ComponentRef,
 	EmbeddedViewRef,
 	Inject,
 	Injectable,
@@ -16,7 +16,7 @@ import {PopupComponent} from '../components/popup/popup.component';
 })
 export class PopupService {
 
-	private _popupOpened = false;
+	private _popupRef: ComponentRef<PopupComponent>;
 
 	constructor(
 		private componentFactoryResolver: ComponentFactoryResolver,
@@ -35,27 +35,36 @@ export class PopupService {
 		return new Promise<void>(resolve => {
 			componentFactoryResolver = componentFactoryResolver ? componentFactoryResolver : this.componentFactoryResolver;
 			const popupFactory = componentFactoryResolver.resolveComponentFactory(PopupComponent);
-			const popupRef = popupFactory.create(this.injector);
-			popupRef.instance.title = title;
-			popupRef.instance.closeOnClickOutside = closeOnClickOutside;
-			popupRef.instance.contentCompInput = contentComponentInput;
-			popupRef.instance.contentComp = componentFactoryResolver.resolveComponentFactory(popupContentComp);
-			this.appRef.attachView(popupRef.hostView);
-			const domElem = (popupRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+			this._popupRef = popupFactory.create(this.injector);
+			this._popupRef.instance.title = title;
+			this._popupRef.instance.closeOnClickOutside = closeOnClickOutside;
+			this._popupRef.instance.contentCompInput = contentComponentInput;
+			this._popupRef.instance.contentComp = componentFactoryResolver.resolveComponentFactory(popupContentComp);
+			this.appRef.attachView(this._popupRef.hostView);
+			const domElem = (this._popupRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
 			this.document.body.appendChild(domElem);
-			this._popupOpened = true;
 
-			const subscription = popupRef.instance.requestClose.subscribe(output => {
-				this.appRef.detachView(popupRef.hostView);
-				popupRef.destroy();
-				subscription.unsubscribe();
-				this._popupOpened = false;
+			const subscription = this._popupRef.instance.requestClose.subscribe(output => {
+				this.appRef.detachView(this._popupRef.hostView);
+				delete this._popupRef;
 				resolve(output);
+				subscription.unsubscribe();
+				if (!!this._popupRef)
+					this._popupRef.destroy();
 			});
+			this._popupRef.onDestroy(() => {
+				subscription.unsubscribe();
+				resolve();
+			})
 		});
 	}
 
 	public get isPopupOpened(): boolean {
-		return this._popupOpened;
+		return !!this._popupRef;
+	}
+
+	public closePopups() {
+		if (!!this._popupRef)
+			this._popupRef.destroy();
 	}
 }

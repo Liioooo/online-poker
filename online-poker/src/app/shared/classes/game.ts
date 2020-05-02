@@ -85,6 +85,7 @@ export class Game {
 
 	win(data: WinEventData) {
 		this._performedAction = false;
+		this._hasStarted = false;
 
 		this._isPlayerTurn = false
 		this._canCheck = false;

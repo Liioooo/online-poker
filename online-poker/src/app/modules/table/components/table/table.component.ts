@@ -4,6 +4,7 @@ import {Game} from '../../../../shared/classes/game';
 import {ActivatedRoute, Router} from '@angular/router';
 import {PopupService} from '../../../../shared/services/popup.service';
 import {AskForNameComponent} from '../../../../shared/components/popup-contents/ask-for-name/ask-for-name.component';
+import {ErrorComponent} from '../../../../shared/components/popup-contents/error/error.component';
 
 @Component({
 	selector: 'app-table',
@@ -17,8 +18,7 @@ export class TableComponent implements OnInit {
 	constructor(
 		private gameService: GameService,
 		private activatedRoute: ActivatedRoute,
-		private popup: PopupService,
-		private router: Router
+		private popup: PopupService
 	) {}
 
 	async ngOnInit() {
@@ -31,7 +31,8 @@ export class TableComponent implements OnInit {
 				gameId
 			});
 		} catch (e) {
-			this.router.navigate(['/']);
+			this.gameService.leaveGame();
+			this.popup.showPopup(ErrorComponent, 'Error joining game', true, e);
 		}
 	}
 
