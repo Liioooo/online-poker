@@ -7,4 +7,5 @@ export interface Player {
 	inGame: boolean;
 	hand?: string[];
 	isPlayerTurn?: boolean;
+	isPlayer?: boolean;
 }

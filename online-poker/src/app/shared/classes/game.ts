@@ -97,6 +97,8 @@ export class Game {
 			this._canRaise = false;
 			this._canFold = false;
 		}
+
+		this._players[this._playerId].isPlayer = true;
 	}
 
 	win(data: WinEventData) {
