@@ -6,4 +6,5 @@ export interface WinEventData {
 	players: Player[];
 	tableCards: string[];
 	winners: number[];
+	amounts: number;
 }

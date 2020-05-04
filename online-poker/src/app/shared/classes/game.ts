@@ -120,6 +120,11 @@ export class Game {
 			if (!player)
 				continue;
 
+			const winnerIndex = data.winners.findIndex(w => w === player.id);
+			if (winnerIndex !== -1) {
+				this._players[player.id].budgetChange = data.amounts[winnerIndex];
+			}
+
 			if (player.hand) {
 				this._players[player.id].hand = player.hand;
 			} else if (player.inGame) {
@@ -131,6 +136,8 @@ export class Game {
 			this._players[player.id].budget = player.budget;
 			this._players[player.id].inGame = player.inGame;
 		}
+
+		console.log(this);
 	}
 
 	get gameId(): string {
