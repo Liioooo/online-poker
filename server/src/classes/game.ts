@@ -133,7 +133,6 @@ export class Game {
 				break;
 			default:
 				this.checkWin();
-				this._hasStarted = false;
 				// this.newGame();
 		}
 		this.pushUpdateState();
@@ -248,6 +247,7 @@ export class Game {
 			console.log(players[i].name + ' wins ' + amounts[i]);
 		}
 		this.pushWinState(players.map(p => p.id));
+		this._hasStarted = false;
 	}
 
 	private pushWinState(winners: number[]) {

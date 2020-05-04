@@ -26,6 +26,7 @@ export class Game {
 	private _canFold = false;
 
 	private _performedAction = false;
+	private _isWinState = false;
 
 	constructor(gameId: string) {
 		this._gameId = gameId;
@@ -38,13 +39,28 @@ export class Game {
 		this._pot = data.pot ?? 0;
 		this._tableCards = data.tableCards ?? [];
 		this._currPlayerIndex = data.currPlayerIndex;
-		this._players = data.players;
 		this._lastBet = data.lastBet;
 		this._smallBlind = data.smallBlindAmount;
 		this._bigBlind = data.bigBlindAmount;
 		this._performedAction = false;
-
 		this._isPlayerTurn = this._currPlayerIndex === this._playerId && this._hasStarted;
+
+		if (this._hasStarted) {
+			this._isWinState = false;
+		}
+
+		if (!this._isWinState) {
+			this._players = data.players;
+		} else {
+			for (let i = 0; i < data.players.length; i++) {
+				if (!this._players[i]) {
+					this._players[i] = data.players[i];
+				}
+				if (!data.players[i]) {
+					this._players[i] = undefined;
+				}
+			}
+		}
 
 		if (this._hasStarted) {
 			for (const player of this._players) {
@@ -84,6 +100,7 @@ export class Game {
 	}
 
 	win(data: WinEventData) {
+		this._isWinState = true;
 		this._performedAction = false;
 		this._hasStarted = false;
 
@@ -108,6 +125,7 @@ export class Game {
 			} else {
 				player.hand = undefined;
 			}
+			this._players[player.id].bet = 0;
 			this._players[player.id].budget = player.budget;
 			this._players[player.id].inGame = player.inGame;
 		}
