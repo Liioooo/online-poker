@@ -1,7 +1,7 @@
 <svg id="Ebene_1" data-name="Ebene 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 55 87">
     <defs>
         <style>.cls-1{fill:#ddd;}.cls-2{fill:#fff;}.cls-3{isolation:isolate;font-size:12px;font-family:RobotoSlab-Black,
-            Roboto Slab;font-weight:800;}.cls-4{fill:#c90005;}
+            Roboto Slab;font-weight:800;}.red{fill:#c90005;}
         </style>    </defs>
     <rect class="cls-1" width="55" height="87" rx="4"/>
     <rect class="cls-2" x="2" y="2" width="51" height="83" rx="4"/>
