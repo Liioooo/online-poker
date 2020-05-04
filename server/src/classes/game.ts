@@ -240,17 +240,17 @@ export class Game {
 		console.log('winners: ', winners.map(p => p.name));
 	}
 
-	private win(players: Player[], amounts: number[]): void {
-		for (let i = 0; i < players.length; i++) {
-			players[i].budget += amounts[i];
+	private win(winners: Player[], amounts: number[]): void {
+		for (let i = 0; i < winners.length; i++) {
+			winners[i].budget += amounts[i];
 			this._pot -= amounts[i];
-			console.log(players[i].name + ' wins ' + amounts[i]);
+			console.log(winners[i].name + ' wins ' + amounts[i]);
 		}
-		this.pushWinState(players.map(p => p.id));
+		this.pushWinState(winners.map(p => p.id), amounts);
 		this._hasStarted = false;
 	}
 
-	private pushWinState(winners: number[]) {
+	private pushWinState(winners: number[], amounts: number[]) {
 		this._players.forEach(player => {
 			if (!player)
 				return;
@@ -267,7 +267,8 @@ export class Game {
 				}),
 				pot: this._pot,
 				tableCards: this._tableCards,
-				winners
+				winners,
+				amounts
 			}, Event.WIN);
 		})
 	}
