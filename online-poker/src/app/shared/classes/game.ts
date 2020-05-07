@@ -136,8 +136,6 @@ export class Game {
 			this._players[player.id].budget = player.budget;
 			this._players[player.id].inGame = player.inGame;
 		}
-
-		console.log(this);
 	}
 
 	get gameId(): string {

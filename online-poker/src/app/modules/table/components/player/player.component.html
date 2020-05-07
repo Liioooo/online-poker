@@ -1,7 +1,10 @@
 <div class="player bg-secondary rounded-sm p-2" [ngStyle]="{top: positionY, left: positionX}">
 	<div class="content-text">
 		<h4>{{player.name}}</h4>
-		<p class="coins">{{player.budget || 0}}</p>
+		<div class="d-flex align-items-center coins">
+			<p>{{player.budget || 0}}</p>
+			<span class="badge badge-success ml-2" *ngIf="player.budgetChange">+ {{player.budgetChange}}</span>
+		</div>
 	</div>
 	<div class="progress" style="height: 6px;" *ngIf="player.isPlayerTurn">
 		<div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
