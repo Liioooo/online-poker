@@ -24,8 +24,7 @@
 				<app-player *ngIf="game.players[7]" [player]="game.players[7]" positionX="-25vw" positionY="22vh"></app-player>
 			</div>
 		</div>
-		<div class="controls d-flex justify-content-between">
-			<div class="m-2"></div>
+		<div class="controls d-flex justify-content-end">
 			<div class="m-2 p-2 border rounded-sm d-flex align-items-center">
 				<ng-container *ngIf="game.hasStarted && game.isPlayerTurn">
 					<input *ngIf="game.canRaise || game.canBet" type="number" class="amount-input form-control form-control-lg border-success h-100" [min]="game.lastBet" [(ngModel)]="betAmount" [max]="game.playerBudget">

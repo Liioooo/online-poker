@@ -6,7 +6,7 @@
 			<span class="badge badge-success ml-2" *ngIf="player.budgetChange">+ {{player.budgetChange}}</span>
 		</div>
 	</div>
-	<div class="progress" style="height: 6px;" *ngIf="player.isPlayerTurn">
+	<div class="progress w-100" style="height: 6px;" *ngIf="player.isPlayerTurn">
 		<div class="progress-bar" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
 	</div>
 	<span class="bet-amount badge badge-info" *ngIf="player.bet && player.bet > 0">{{player.bet}}</span>

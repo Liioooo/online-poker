@@ -6,6 +6,15 @@
 	transform: translate(-50%, -50%);
 	min-width: 11rem;
 
+	@media (max-width: 1200px) {
+		position: relative;
+		transform: none;
+		top: 0 !important;
+		left: 0 !important;
+		width: 65vw;
+		margin-bottom: 4rem;
+	}
+
 	.progress {
 		position: absolute;
 		width: 14vw;
@@ -39,6 +48,11 @@
 		top: -20px;
 		left: 6.2rem;
 		font-size: 1.2rem;
+
+		@media (max-width: 1200px) {
+			top: 50%;
+			left: calc(65vw + 1.5rem);
+		}
 	}
 
 	.wait {

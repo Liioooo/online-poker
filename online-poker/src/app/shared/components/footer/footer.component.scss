@@ -2,7 +2,12 @@
 	height: 4rem;
 
 	.invite {
-		font-size: 1.2rem;
+
+		.link {
+			@media (max-width: 800px) {
+				display: none;
+			}
+		}
 
 		button {
 			font-size: 1.2rem;

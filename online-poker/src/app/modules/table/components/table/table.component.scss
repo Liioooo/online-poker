@@ -25,6 +25,10 @@
 				height: 18vh;
 			}
 
+			@media (max-width: 1200px) {
+				margin-bottom: 5rem;
+			}
+
 			.poker-card {
 				height: 100%;
 			}
@@ -32,6 +36,19 @@
 
 		.players {
 			position: absolute;
+		}
+
+		@media (max-width: 1200px) {
+			flex-direction: column;
+			justify-content: flex-start !important;
+			margin-top: 3rem;
+			//max-height: calc(100vh - 4rem - 7rem - 3rem - 3rem);
+			max-height: calc(100vh - 17rem);
+			overflow: auto;
+
+			.players {
+				position: relative;
+			}
 		}
 
 	}
@@ -49,6 +66,10 @@
 		.action-btn {
 			min-width: 7rem;
 			font-size: 1.5rem;
+		}
+
+		@media (max-width: 1200px) {
+			justify-content: center !important;
 		}
 	}
 }
