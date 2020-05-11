@@ -65,6 +65,7 @@ export class Game {
 			if (this._smallBlindIndex === player.id) {
 				this._smallBlindIndex = this.bigBlindIndex;
 			}
+			this.checkOnePlayer();
 		}
 		this._players[player.id] = null;
 		console.log(`${player.name} left the game ${this.id}`);
@@ -141,9 +142,7 @@ export class Game {
 	private endTurn(isSmallBlind?: boolean): boolean {
 		if (!isSmallBlind)
 			this.currPlayer.hasCalled = true;
-		if (this.inGamePlayers().length === 1) {
-			this.win([this.inGamePlayers()[0]], [this._pot]);
-		}
+		this.checkOnePlayer();
 		do {
 			this._currPlayerIndex = (this._currPlayerIndex + 1) % this._players.length;
 		} while (!(this._players[this._currPlayerIndex] && this._players[this._currPlayerIndex].inGame));
@@ -152,6 +151,18 @@ export class Game {
 		}
 		this.pushUpdateState();
 		return true;
+	}
+
+	private checkOnePlayer(): void {
+		if (this.inGamePlayers().length === 1) {
+			for (let player of this._players) {
+				if (player) {
+					this._pot += player.bet;
+					player.bet = 0;
+				}
+			}
+			this.win([this.inGamePlayers()[0]], [this._pot]);
+		}
 	}
 
 	private canStartNextRound(): boolean {
