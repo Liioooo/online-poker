@@ -55,6 +55,9 @@ export class WebsocketManager {
 				}));
 				game.join(player);
 				clearTimeout(timeout);
+				game.deleteSubject.subscribe(_ => {
+					this.games.delete(game.id);
+				});
 			} else if (message.event == Event.JOIN_GAME) {
 				const data = parseJoinGameData(message.data);
 				if (!data) {

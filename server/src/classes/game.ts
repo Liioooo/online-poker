@@ -3,6 +3,7 @@ import {Cards, playingCard} from '../models/cards';
 import {v4 as Uuidv4} from 'uuid';
 import {WinDetection} from './win-detection';
 import {Event} from '../models/event';
+import {Subject} from 'rxjs';
 
 export class Game {
 
@@ -27,6 +28,8 @@ export class Game {
 	private _tableCards: playingCard[];
 	private _roundNum: number;
 
+	public deleteSubject: Subject<void>;
+
 	constructor(smallBlindAmount: number, bigBlindAmount: number, buyIn: number, playerCount?: number) {
 		this._smallBlindAmount = smallBlindAmount;
 		this._bigBlindAmount = bigBlindAmount;
@@ -34,6 +37,7 @@ export class Game {
 		if (playerCount)
 			this._playerLimit = playerCount;
 		this._players = [];
+		this.deleteSubject = new Subject<void>();
 	}
 
 	public join(player: Player): boolean {
@@ -83,7 +87,7 @@ export class Game {
 
 	private deleteGame() {
 		console.log(`Deleted game ${this.id}`);
-		// TODO Andi
+		this.deleteSubject.next();
 	}
 
 	public newGame(): void {
