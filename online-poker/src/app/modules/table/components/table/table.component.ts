@@ -22,7 +22,10 @@ export class TableComponent implements OnInit {
 	) {}
 
 	async ngOnInit() {
-		if (!!this.gameService.game) return;
+		if (!!this.gameService.game) {
+			this.betAmount = this.game.bigBlind;
+			return;
+		}
 		const gameId = this.activatedRoute.snapshot.paramMap.get('tableId');
 		const playerName = await this.popup.showPopup(AskForNameComponent, 'Username', false);
 		try {
