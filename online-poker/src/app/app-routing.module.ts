@@ -11,7 +11,12 @@ const routes: Routes = [
 	{
 		path: 'table',
 		loadChildren: () => import('./modules/table/table.module').then(m => m.TableModule)
-	}
+	},
+	{
+		path: '404',
+		loadChildren: () => import('./modules/not-found/not-found.module').then(m => m.NotFoundModule)
+	},
+	{path: '**', redirectTo: '/404'}
 ];
 
 @NgModule({
