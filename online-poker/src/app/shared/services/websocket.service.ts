@@ -25,7 +25,7 @@ export class WebsocketService {
 	private _subscription: Subscription;
 
 	constructor(private router: Router, private popup: PopupService) {
-		this._subject = webSocket({url: 'ws://localhost:8000/ws'});
+		this._subject = webSocket({url: this.getWebsocketUrl()});
 	}
 
 	public connect(data: JoinGameData | CreateGameData): Promise<string> {
@@ -88,5 +88,10 @@ export class WebsocketService {
 
 	public get game(): Game {
 		return this._currentGame;
+	}
+
+	private getWebsocketUrl(): string {
+		// tslint:disable-next-line:max-line-length
+		return (location.protocol === 'http:' ? 'ws' : 'wss') + '://' + location.hostname + ':' + (location.hostname === 'localhost' ? 8000 : 443) + '/ws';
 	}
 }
