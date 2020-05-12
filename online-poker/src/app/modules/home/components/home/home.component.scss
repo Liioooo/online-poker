@@ -1,0 +1,15 @@
+.poker {
+	font-size: 3rem;
+
+	@media (min-width: 576px) {
+		font-size: 4rem;
+	}
+}
+
+.logo {
+	width: 100%;
+
+	@media (min-width: 576px) {
+		width: 75%;
+	}
+}
