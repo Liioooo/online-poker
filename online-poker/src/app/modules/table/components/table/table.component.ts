@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {GameService} from '../../../../shared/services/game.service';
 import {Game} from '../../../../shared/classes/game';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {PopupService} from '../../../../shared/services/popup.service';
 import {AskForNameComponent} from '../../../../shared/components/popup-contents/ask-for-name/ask-for-name.component';
 import {ErrorComponent} from '../../../../shared/components/popup-contents/error/error.component';
@@ -13,7 +13,7 @@ import {ErrorComponent} from '../../../../shared/components/popup-contents/error
 })
 export class TableComponent implements OnInit {
 
-	public betAmount = this.game.bigBlind;
+	public betAmount: number;
 
 	constructor(
 		private gameService: GameService,
@@ -30,6 +30,7 @@ export class TableComponent implements OnInit {
 				playerName,
 				gameId
 			});
+			this.betAmount = this.game.bigBlind;
 		} catch (e) {
 			this.gameService.leaveGame();
 			this.popup.showPopup(ErrorComponent, 'Error joining game', true, e);
