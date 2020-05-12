@@ -13,7 +13,7 @@ import {ErrorComponent} from '../../../../shared/components/popup-contents/error
 })
 export class TableComponent implements OnInit {
 
-	public betAmount = 1;
+	public betAmount = this.game.bigBlind;
 
 	constructor(
 		private gameService: GameService,
@@ -42,6 +42,10 @@ export class TableComponent implements OnInit {
 
 	public get waitingForPlayers(): boolean {
 		return !this.game.hasStarted && this.game.players.filter(p => !!p).length < 2 || this.game.hasStarted && !this.game.isPlayerTurn;
+	}
+
+	public get minBetAmount(): number {
+		return Math.max(this.game.bigBlind, this.game.lastBet);
 	}
 
 	public get game(): Game {

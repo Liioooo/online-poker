@@ -27,11 +27,11 @@
 		<div class="controls d-flex justify-content-end">
 			<div class="m-2 p-2 border rounded-sm d-flex align-items-center">
 				<ng-container *ngIf="game.hasStarted && game.isPlayerTurn">
-					<input *ngIf="game.canRaise || game.canBet" type="number" class="amount-input form-control form-control-lg border-success h-100" [min]="game.lastBet" [(ngModel)]="betAmount" [max]="game.playerBudget">
+					<input *ngIf="game.canRaise || game.canBet" type="number" class="amount-input form-control form-control-lg border-success h-100" [min]="minBetAmount" [(ngModel)]="betAmount" [max]="game.playerBudget">
 					<button *ngIf="game.canCall" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="call()">Call {{game.toCall}}</button>
 					<button *ngIf="game.canCheck" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="check()">Check</button>
 					<button *ngIf="game.canRaise" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="raise()" [disabled]="betAmount <= game.lastBet || betAmount > game.playerBudget">Raise {{betAmount}}</button>
-					<button *ngIf="game.canBet" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="bet()" [disabled]="betAmount > game.playerBudget || betAmount <= 0">Bet {{betAmount}}</button>
+					<button *ngIf="game.canBet" type="button" class="action-btn btn btn-outline-success h-100 ml-2" (click)="bet()" [disabled]="betAmount > game.playerBudget || betAmount < minBetAmount">Bet {{betAmount}}</button>
 					<button *ngIf="game.canFold" type="button" class="action-btn btn btn-outline-danger h-100 ml-2" (click)="fold()">Fold</button>
 				</ng-container>
 				<button *ngIf="canStart" type="button" class="action-btn btn btn-outline-success h-100" (click)="startGame()">Start Game</button>
