@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Player} from '../../../../shared/models/player';
 
 @Component({
@@ -6,7 +6,7 @@ import {Player} from '../../../../shared/models/player';
 	templateUrl: './player.component.html',
 	styleUrls: ['./player.component.scss']
 })
-export class PlayerComponent implements OnInit {
+export class PlayerComponent {
 
 	@Input()
 	public positionX: number;
@@ -17,10 +17,11 @@ export class PlayerComponent implements OnInit {
 	@Input()
 	public player: Player;
 
-	constructor() {
-	}
-
-	ngOnInit(): void {
+	public get dealerTranslate(): string {
+		if (!this.player.isPlayer) {
+			return 'translate(50%, -50%)';
+		}
+		return 'translate(-25%, -50%)';
 	}
 
 }
