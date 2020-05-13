@@ -13,6 +13,7 @@ import {WinEventData} from '../models/response/win-event-data';
 import {Router} from '@angular/router';
 import {PopupService} from './popup.service';
 import {ErrorComponent} from '../components/popup-contents/error/error.component';
+import {MessageData} from '../models/response/message-data';
 
 @Injectable({
 	providedIn: 'root'
@@ -79,6 +80,9 @@ export class WebsocketService {
 		}
 		if (msg.event === Event.WIN) {
 			this._currentGame.win(msg.data as WinEventData);
+		}
+		if (msg.event === Event.CHAT_MESSAGE) {
+			this._currentGame.message(msg.data as MessageData);
 		}
 	}
 

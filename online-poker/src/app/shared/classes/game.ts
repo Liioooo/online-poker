@@ -1,6 +1,7 @@
 import {UpdateEventData} from '../models/response/update-event-data';
 import {Player} from '../models/player';
 import {WinEventData} from '../models/response/win-event-data';
+import {MessageData} from '../models/response/message-data';
 
 export class Game {
 
@@ -28,6 +29,8 @@ export class Game {
 
 	private _performedAction = false;
 	private _isWinState = false;
+
+	private _messages: MessageData[] = [];
 
 	constructor(gameId: string) {
 		this._gameId = gameId;
@@ -141,6 +144,10 @@ export class Game {
 		}
 	}
 
+	public message(data: MessageData) {
+		this._messages.push(data);
+	}
+
 	get gameId(): string {
 		return this._gameId;
 	}
@@ -223,5 +230,9 @@ export class Game {
 
 	get lastBet(): number {
 		return this._lastBet;
+	}
+
+	get messages(): MessageData[] {
+		return this._messages;
 	}
 }

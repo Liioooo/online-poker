@@ -15,6 +15,9 @@ export class TableComponent implements OnInit {
 
 	public betAmount: number;
 
+	public writingMsg = false;
+	public msg: string;
+
 	constructor(
 		private gameService: GameService,
 		private activatedRoute: ActivatedRoute,
@@ -93,6 +96,21 @@ export class TableComponent implements OnInit {
 
 	public raise() {
 		this.gameService.raise(this.betAmount);
+	}
+
+	public writeMsg() {
+		this.writingMsg = true;
+	}
+
+	public cancelMsg() {
+		this.writingMsg = false;
+		this.msg = '';
+	}
+
+	public sendMsg() {
+		this.writingMsg = false;
+		this.gameService.sendMessage(this.msg);
+		this.msg = '';
 	}
 
 }

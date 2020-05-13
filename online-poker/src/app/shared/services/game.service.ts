@@ -31,6 +31,15 @@ export class GameService {
 		this.router.navigate(['/']);
 	}
 
+	public sendMessage(msg: string) {
+		this.webSocket.send({
+			event: Event.CHAT_MESSAGE,
+			data: {
+				message: msg
+			}
+		});
+	}
+
 	public startGame() {
 		if (this.game.performedAction) return;
 		this.game.performedAction = true;

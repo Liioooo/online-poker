@@ -286,6 +286,19 @@ export class Game {
 		// this._hasStarted = false;
 	}
 
+	public pushChatMessage(sender: string, message: string) {
+		const time = Date.now();
+		this._players.forEach(player => {
+			if (!player)
+				return;
+			player.sendState({
+				time,
+				sender,
+				message
+			}, Event.CHAT_MESSAGE);
+		});
+	}
+
 	private pushWinState(winners: number[], amounts: number[]) {
 		this._players.forEach(player => {
 			if (!player)

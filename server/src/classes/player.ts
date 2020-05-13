@@ -5,6 +5,7 @@ import {parseMessage} from '../models/message';
 import {Event} from '../models/event';
 import {parseRaiseData} from '../models/message-data/raise-data';
 import {playingCard} from '../models/cards';
+import {parseChatMessageData} from '../models/message-data/chat-message-data';
 
 export class Player {
 	private _id: number;
@@ -106,6 +107,14 @@ export class Player {
 				break;
 			case Event.START_GAME:
 				this.game.newGame();
+				break;
+			case Event.CHAT_MESSAGE:
+				const msgData = parseChatMessageData(message.data);
+				if (!msgData) {
+					this._socket.send(JSON.stringify({error: 'Invalid request format.'}));
+					break;
+				}
+				this._game.pushChatMessage(this._name, msgData.message);
 				break;
 			default:
 				this._socket.send(JSON.stringify({error: 'It is not your turn.'}));
