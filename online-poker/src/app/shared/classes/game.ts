@@ -9,6 +9,7 @@ export class Game {
 	private _pot = 0;
 	private _tableCards: string[] = [];
 	private _currPlayerIndex: number;
+	private _dealerIndex: number;
 	private _players: Player[] = [];
 	private _lastBet: number;
 	private _smallBlind: number;
@@ -39,6 +40,7 @@ export class Game {
 		this._pot = data.pot ?? 0;
 		this._tableCards = data.tableCards ?? [];
 		this._currPlayerIndex = data.currPlayerIndex;
+		this._dealerIndex = data.dealerIndex;
 		this._lastBet = data.lastBet;
 		this._smallBlind = data.smallBlindAmount;
 		this._bigBlind = data.bigBlindAmount;
@@ -99,6 +101,7 @@ export class Game {
 		}
 
 		this._players[this._playerId].isPlayer = true;
+		this._players[this._dealerIndex].isDealer = true;
 	}
 
 	win(data: WinEventData) {
@@ -204,6 +207,10 @@ export class Game {
 
 	get hasStarted(): boolean {
 		return this._hasStarted;
+	}
+
+	get isWinState(): boolean {
+		return this._isWinState;
 	}
 
 	get performedAction(): boolean {

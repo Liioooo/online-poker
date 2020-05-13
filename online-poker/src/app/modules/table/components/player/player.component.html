@@ -11,6 +11,7 @@
 	</div>
 	<span class="bet-amount badge badge-info" *ngIf="player.bet && player.bet > 0">{{player.bet}}</span>
 	<span *ngIf="player.isPlayer" class="is-player-marker"></span>
+	<span *ngIf="player.isDealer" class="is-dealer-marker"></span>
 	<div class="cards" *ngIf="player.hand; else waiting">
 		<img [src]="'assets/cards/' + player.hand[0] + '.svg'" class="poker-card">
 		<img [src]="'assets/cards/' + player.hand[1] + '.svg'" class="poker-card ml-1">

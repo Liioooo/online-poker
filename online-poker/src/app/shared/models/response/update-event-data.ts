@@ -11,4 +11,5 @@ export interface UpdateEventData {
 	tableCards: string[];
 	smallBlindAmount: number;
 	bigBlindAmount: number;
+	dealerIndex: number;
 }

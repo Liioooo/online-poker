@@ -41,11 +41,22 @@ export class TableComponent implements OnInit {
 	}
 
 	public get canStart(): boolean {
-		return !this.game.hasStarted && this.game.players.filter(p => !!p).length >= 2;
+		return !this.game.hasStarted && this.game.players.filter(p => !!p).length >= 2 && !this.waitingForGame;
 	}
 
 	public get waitingForPlayers(): boolean {
-		return !this.game.hasStarted && this.game.players.filter(p => !!p).length < 2 || this.game.hasStarted && !this.game.isPlayerTurn;
+		if (!this.game.hasStarted && this.game.players.filter(p => !!p).length < 2) {
+			return true;
+		} else if (this.game.hasStarted && !this.game.isPlayerTurn) {
+			return true;
+		} else if (this.game.isWinState && this.game.players.filter(p => !!p).length < 2) {
+			return true;
+		}
+		return false;
+	}
+
+	public get waitingForGame(): boolean {
+		return this.game.isWinState && this.game.players.filter(p => !!p).length >= 2;
 	}
 
 	public get minBetAmount(): number {

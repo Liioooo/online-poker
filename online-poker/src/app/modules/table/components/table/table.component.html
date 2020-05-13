@@ -42,6 +42,7 @@
 					</ng-container>
 					<button *ngIf="canStart" type="button" class="action-btn btn btn-outline-success h-100" (click)="startGame()">Start Game</button>
 					<p *ngIf="waitingForPlayers">Waiting for Players</p>
+					<p *ngIf="waitingForGame">Waiting for next game</p>
 				</div>
 			</div>
 		</div>

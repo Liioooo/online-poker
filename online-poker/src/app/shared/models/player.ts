@@ -9,4 +9,5 @@ export interface Player {
 	hand?: string[];
 	isPlayerTurn?: boolean;
 	isPlayer?: boolean;
+	isDealer?: boolean;
 }
