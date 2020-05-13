@@ -42,8 +42,7 @@
 			flex-direction: column;
 			justify-content: flex-start !important;
 			margin-top: 3rem;
-			//max-height: calc(100vh - 4rem - 7rem - 3rem - 3rem);
-			max-height: calc(100vh - 17rem);
+			max-height: calc(100vh - 25rem);
 			overflow: auto;
 
 			.players {
@@ -54,7 +53,7 @@
 	}
 
 	.controls {
-		height: 7rem;
+		height: 10rem;
 
 		.amount-input {
 			color: $success;
@@ -68,8 +67,28 @@
 			font-size: 1.5rem;
 		}
 
+		.chat-container {
+			max-width: 60vw;
+		}
+
 		@media (max-width: 1200px) {
-			justify-content: center !important;
+			height: 14rem;
+			flex-direction: column !important;
+
+			.chat-container {
+				width: 100%;
+				max-width: none;
+			}
+
+			.buttons-container {
+				align-self: center !important;
+				width: 100%;
+				height: 100% !important;
+				padding: {
+					top: 0 !important;
+					bottom: 0 !important;
+				};
+			}
 		}
 	}
 }
