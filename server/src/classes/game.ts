@@ -138,7 +138,7 @@ export class Game {
 				break;
 			default:
 				this.checkWin();
-				// this.newGame();
+				setTimeout(() => this.newGame(), 3000);
 		}
 		this.pushUpdateState();
 	}
@@ -146,7 +146,8 @@ export class Game {
 	private endTurn(isSmallBlind?: boolean): boolean {
 		if (!isSmallBlind)
 			this.currPlayer.hasCalled = true;
-		this.checkOnePlayer();
+		if (this.checkOnePlayer())
+			return true;
 		do {
 			this._currPlayerIndex = (this._currPlayerIndex + 1) % this._players.length;
 		} while (!(this._players[this._currPlayerIndex] && this._players[this._currPlayerIndex].inGame));
@@ -157,7 +158,7 @@ export class Game {
 		return true;
 	}
 
-	private checkOnePlayer(): void {
+	private checkOnePlayer(): boolean {
 		if (this.inGamePlayers().length === 1) {
 			for (let player of this._players) {
 				if (player) {
@@ -166,7 +167,10 @@ export class Game {
 				}
 			}
 			this.win([this.inGamePlayers()[0]], [this._pot]);
+			setTimeout(() => this.newGame(), 3000);
+			return true;
 		}
+		return false;
 	}
 
 	private canStartNextRound(): boolean {
@@ -237,6 +241,17 @@ export class Game {
 		return bb;
 	}
 
+	private get dealerIndex(): number {
+		let bb = this._smallBlindAmount;
+		do {
+			bb--;
+			if (bb < 0)
+				bb = this._players.length - 1;
+		}
+		while (!this._players[bb]);
+		return bb;
+	}
+
 	private inGamePlayers(): Player[] {
 		return this._players.filter(p => p !== null && p.inGame);
 	}
@@ -262,7 +277,7 @@ export class Game {
 			console.log(winners[i].name + ' wins ' + amounts[i]);
 		}
 		this.pushWinState(winners.map(p => p.id), amounts);
-		this._hasStarted = false;
+		// this._hasStarted = false;
 	}
 
 	private pushWinState(winners: number[], amounts: number[]) {
@@ -306,6 +321,7 @@ export class Game {
 					} : null;
 				}),
 				currPlayerIndex: this._currPlayerIndex,
+				dealerIndex: this.dealerIndex,
 				pot: this._pot,
 				lastBet: this._lastBet,
 				tableCards: this._tableCards,

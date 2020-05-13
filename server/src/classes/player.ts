@@ -150,7 +150,6 @@ export class Player {
 		this._game = value;
 	}
 
-
 	get bet(): number {
 		return this._bet;
 	}
