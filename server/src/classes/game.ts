@@ -91,13 +91,18 @@ export class Game {
 	}
 
 	public newGame(): void {
+		const players = this._players.filter(p => p);
+		if (players.length <= 1) {
+			this._hasStarted = false;
+			return;
+		}
+		players.forEach(p => { p.inGame = true });
 		if (this._smallBlindIndex < 0) {
 			do {
 				this._smallBlindIndex = Math.floor(Math.random() * this._players.length);
 			} while (!this._players[this._smallBlindIndex]);
 		}
 		this._hasStarted = true;
-		this._players.forEach(p => { if (p) p.inGame = true });
 		this._smallBlindIndex = this.bigBlindIndex;
 		this._currPlayerIndex = this._smallBlindIndex;
 		this._stack = Cards.newDeck();
@@ -127,20 +132,22 @@ export class Game {
 			case 0:
 				this.raise(this._smallBlindAmount, true);
 				this.raise(this._bigBlindAmount);
+				this.pushUpdateState();
 				break;
 			case 1:
 				for (let i = 0; i < 3; i++)
 					this._tableCards.push(this._stack.pop());
+				this.pushUpdateState();
 				break;
 			case 2:
 			case 3:
 				this._tableCards.push(this._stack.pop());
+				this.pushUpdateState();
 				break;
 			default:
 				this.checkWin();
 				setTimeout(() => this.newGame(), 3000);
 		}
-		this.pushUpdateState();
 	}
 
 	private endTurn(isSmallBlind?: boolean): boolean {
@@ -151,10 +158,9 @@ export class Game {
 		do {
 			this._currPlayerIndex = (this._currPlayerIndex + 1) % this._players.length;
 		} while (!(this._players[this._currPlayerIndex] && this._players[this._currPlayerIndex].inGame));
-		if (this.canStartNextRound()) {
-			this.newRound();
-		}
 		this.pushUpdateState();
+		if (this.canStartNextRound())
+			this.newRound();
 		return true;
 	}
 
