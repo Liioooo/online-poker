@@ -1,4 +1,5 @@
 @import "~bootswatch/dist/darkly/variables";
+@import "mixins";
 
 .table-page {
 	display: flex;
@@ -70,10 +71,18 @@
 		.chat-container {
 			max-width: 60vw;
 
-			.message {
-				p {
-					font-size: 1.2rem;
+			.messages {
+				@include scrollbar(5px);
+
+				.message {
+					p {
+						font-size: 1.2rem;
+					}
 				}
+			}
+
+			.buttons {
+				width: 4.5rem;
 			}
 
 			.write-msg {

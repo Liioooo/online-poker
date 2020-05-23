@@ -67,6 +67,8 @@ export class WebsocketService {
 
 	public disconnect() {
 		this._subscription.unsubscribe();
+		if (this._currentGame)
+			this._currentGame.destroy();
 		delete this._currentGame;
 	}
 

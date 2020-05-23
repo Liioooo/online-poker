@@ -2,6 +2,7 @@ import {UpdateEventData} from '../models/response/update-event-data';
 import {Player} from '../models/player';
 import {WinEventData} from '../models/response/win-event-data';
 import {MessageData} from '../models/response/message-data';
+import {Observable, Subject} from 'rxjs';
 
 export class Game {
 
@@ -31,6 +32,7 @@ export class Game {
 	private _isWinState = false;
 
 	private _messages: MessageData[] = [];
+	private _newMessageSubject = new Subject<void>();
 
 	constructor(gameId: string) {
 		this._gameId = gameId;
@@ -146,6 +148,7 @@ export class Game {
 
 	public message(data: MessageData) {
 		this._messages.push(data);
+		this._newMessageSubject.next();
 	}
 
 	get gameId(): string {
@@ -234,5 +237,14 @@ export class Game {
 
 	get messages(): MessageData[] {
 		return this._messages;
+	}
+
+	get onNewMessage(): Observable<void> {
+		return this._newMessageSubject.asObservable();
+	}
+
+	public destroy() {
+		this._newMessageSubject.complete();
+		this._newMessageSubject.unsubscribe();
 	}
 }

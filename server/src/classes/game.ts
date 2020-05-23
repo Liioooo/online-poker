@@ -57,6 +57,7 @@ export class Game {
 		}
 		console.log(`${player.name} joined the game ${this.id}`);
 		this.pushUpdateState();
+		this.pushChatMessage('Server', `"${player.name}" joined the game`);
 		return true;
 	}
 
@@ -83,6 +84,7 @@ export class Game {
 		if (deleteGame)
 			this.deleteGame();
 		this.pushUpdateState();
+		this.pushChatMessage('Server', `"${player.name}" left the game`);
 	}
 
 	private deleteGame() {
@@ -116,6 +118,7 @@ export class Game {
 		this._pot = 0;
 		this._roundNum = 0;
 		this.newRound();
+		this.pushChatMessage('Server', 'Starting new game');
 	}
 
 	private newRound(): void {

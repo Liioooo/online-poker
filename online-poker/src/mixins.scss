@@ -1,0 +1,25 @@
+@import "~bootswatch/dist/darkly/variables";
+
+@mixin scrollbar($width, $height: -1) {
+
+	&::-webkit-scrollbar-track {
+		background-color: $gray-900;
+	}
+
+	&::-webkit-scrollbar {
+		width: $width;
+		@if ($height != -1) {
+			height: $height;
+		}
+	}
+
+	&::-webkit-scrollbar-thumb {
+		border-radius: $width / 2;
+		background-color: $secondary;
+	}
+
+	scrollbar-width: thin;
+	scrollbar-color: $secondary $gray-900;
+	scrollbar-color: $secondary $gray-900;
+
+}

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {GameService} from '../../../../shared/services/game.service';
 import {Game} from '../../../../shared/classes/game';
 import {ActivatedRoute} from '@angular/router';
@@ -18,15 +18,24 @@ export class TableComponent implements OnInit {
 	public writingMsg = false;
 	public msg: string;
 
+	@ViewChild('chatMsgInput', {static: false})
+	private chatMsgInput: ElementRef<HTMLInputElement>;
+
+
+	@ViewChild('chatMessages', {static: false})
+	private chatMsgs: ElementRef<HTMLDivElement>;
+
 	constructor(
 		private gameService: GameService,
 		private activatedRoute: ActivatedRoute,
-		private popup: PopupService
+		private popup: PopupService,
+		private changeDetectorRef: ChangeDetectorRef
 	) {}
 
 	async ngOnInit() {
 		if (!!this.gameService.game) {
 			this.betAmount = this.game.bigBlind;
+			this.subscribeToNewMsgs();
 			return;
 		}
 		const gameId = this.activatedRoute.snapshot.paramMap.get('tableId');
@@ -37,10 +46,18 @@ export class TableComponent implements OnInit {
 				gameId
 			});
 			this.betAmount = this.game.bigBlind;
+			this.subscribeToNewMsgs();
 		} catch (e) {
 			this.gameService.leaveGame();
 			this.popup.showPopup(ErrorComponent, 'Error joining game', true, e);
 		}
+	}
+
+	private subscribeToNewMsgs() {
+		this.game.onNewMessage.subscribe(() => {
+			this.changeDetectorRef.detectChanges();
+			this.chatMsgs.nativeElement.scrollTo(0, this.chatMsgs.nativeElement.scrollHeight);
+		});
 	}
 
 	public get canStart(): boolean {
@@ -100,6 +117,8 @@ export class TableComponent implements OnInit {
 
 	public writeMsg() {
 		this.writingMsg = true;
+		this.changeDetectorRef.detectChanges();
+		this.chatMsgInput.nativeElement.focus();
 	}
 
 	public cancelMsg() {
@@ -108,6 +127,9 @@ export class TableComponent implements OnInit {
 	}
 
 	public sendMsg() {
+		if (!this.msg || this.msg.length <= 0)
+			return;
+
 		this.writingMsg = false;
 		this.gameService.sendMessage(this.msg);
 		this.msg = '';
